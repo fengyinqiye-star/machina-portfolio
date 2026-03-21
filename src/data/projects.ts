@@ -34,5 +34,6 @@ export const PROJECTS: Project[] = [
     duration: "自動開発",
     status: "completed",
     highlight: "実績第3号 — 時計・ストップウォッチ・タイマー三位一体アプリ",
+    url: "https://ai-company-2026-03-21-clock-timer-52i0y013e.vercel.app",
   },
 ];
