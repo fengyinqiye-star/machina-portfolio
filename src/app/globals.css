@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: #fafaf8;
+    --bg-2: #f2f0ec;
+    --border: #e0ddd8;
+    --text: #111110;
+    --muted: #88857f;
+    --accent: #5c7c1e;
+  }
+
+  .dark {
+    --bg: #0c0c0b;
+    --bg-2: #141412;
+    --border: #222220;
+    --text: #f2f0ec;
+    --muted: #77756f;
+    --accent: #a8e63a;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-space), system-ui, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    @apply transition-colors duration-300;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: #0c0c0b;
+  }
+}
