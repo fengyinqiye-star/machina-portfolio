@@ -25,4 +25,14 @@ export const PROJECTS: Project[] = [
     status: "completed",
     highlight: "実績第2号 — フォーム受注から全自動納品",
   },
+  {
+    id: "2026-03-21-clock-timer-app",
+    title: "クロック＆タイマー Web アプリ",
+    description:
+      "アナログ＋デジタル時計・ストップウォッチ・カウントダウンタイマーを統合したミニマルデザインのブラウザアプリ。Atomic Design + カスタムフック設計、22スイート153テスト全PASS、カバレッジ97%超を達成。",
+    techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Web Audio API", "Jest", "React Testing Library"],
+    duration: "自動開発",
+    status: "completed",
+    highlight: "実績第3号 — 時計・ストップウォッチ・タイマー三位一体アプリ",
+  },
 ];
