@@ -8,6 +8,13 @@ const FROM_ADDRESS = "Machina <noreply@ai-company.dev>";
 const COMPANY_NAME = "Machina";
 const OWNER_EMAIL = process.env.OWNER_EMAIL ?? "fengyinqiye@gmail.com";
 
+// RFC 2047 B-encoding: 非ASCII文字を含む件名をメールクライアント互換に変換
+function encodeSubject(subject: string): string {
+  if (/^[\x20-\x7E]*$/.test(subject)) return subject;
+  const b64 = Buffer.from(subject, "utf8").toString("base64");
+  return `=?UTF-8?B?${b64}?=`;
+}
+
 export async function sendOrderConfirmation(params: {
   to: string;
   contactName: string;
@@ -24,7 +31,7 @@ export async function sendOrderConfirmation(params: {
   await resend.emails.send({
     from: FROM_ADDRESS,
     to,
-    subject: `【受注確認】${projectName} のご依頼を受け付けました`,
+    subject: encodeSubject(`【受注確認】${projectName} のご依頼を受け付けました`),
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -74,7 +81,7 @@ export async function sendDeliveryNotification(params: {
   await resend.emails.send({
     from: FROM_ADDRESS,
     to,
-    subject: `【納品完了】${projectName} の開発が完了しました`,
+    subject: encodeSubject(`【納品完了】${projectName} の開発が完了しました`),
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -126,7 +133,7 @@ export async function sendOwnerNotification(params: {
   await resend.emails.send({
     from: FROM_ADDRESS,
     to: OWNER_EMAIL,
-    subject: `【新規受注】${projectName}`,
+    subject: encodeSubject(`【新規受注】${projectName}`),
     html: `
 <!DOCTYPE html>
 <html lang="ja">
