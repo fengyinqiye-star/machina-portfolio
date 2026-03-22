@@ -81,7 +81,7 @@ export default function HearingPage() {
       <div style={styles.card}>
         <div style={{ marginBottom: 32 }}>
           <p style={{ ...styles.muted, fontSize: 12, letterSpacing: "0.1em", marginBottom: 8 }}>
-            AI COMPANY — HEARING {round > 1 ? `(第${round}回)` : ""}
+            MACHINA — HEARING {round > 1 ? `(第${round}回)` : ""}
           </p>
           <h1 style={styles.title}>詳細ヒアリング</h1>
           <p style={{ ...styles.muted, marginBottom: 4 }}>案件: <strong style={{ color: "#e8e5df" }}>{projectName}</strong></p>

@@ -56,7 +56,7 @@ export default function FeedbackPage() {
     <div style={styles.container}>
       <div style={styles.card}>
         <div style={{ marginBottom: 32 }}>
-          <p style={{ ...styles.muted, fontSize: 12, letterSpacing: "0.1em", marginBottom: 8 }}>AI COMPANY — FEEDBACK</p>
+          <p style={{ ...styles.muted, fontSize: 12, letterSpacing: "0.1em", marginBottom: 8 }}>MACHINA — FEEDBACK</p>
           <h1 style={styles.title}>修正フィードバック</h1>
           <p style={{ ...styles.muted, marginBottom: 4 }}>案件: <strong style={{ color: "#e8e5df" }}>{projectName}</strong></p>
           {previewUrl && (

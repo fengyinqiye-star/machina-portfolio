@@ -24,7 +24,7 @@ export async function createPaymentLink(params: {
   // 1. Productを作成
   const product = await stripe.products.create({
     name: projectName,
-    description: `AI Company 自動開発サービス — 案件ID: ${orderId}`,
+    description: `Machina 自動開発サービス — 案件ID: ${orderId}`,
     metadata: { orderId },
   });
 

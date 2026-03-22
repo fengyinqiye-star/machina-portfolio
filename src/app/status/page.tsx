@@ -74,7 +74,7 @@ export default function StatusPage() {
     <div style={{ background: "#0f0f0e", minHeight: "100vh", padding: "40px 24px", fontFamily: "monospace, sans-serif", color: "#e8e5df" }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 32 }}>
-          <h1 style={{ fontSize: 20, fontWeight: "bold", color: "#a8e63a" }}>AI Company — 案件ステータス</h1>
+          <h1 style={{ fontSize: 20, fontWeight: "bold", color: "#a8e63a" }}>Machina — 案件ステータス</h1>
           <span style={{ fontSize: 12, color: "#88857f" }}>最終更新: {lastUpdated} (10秒ごと自動更新)</span>
         </div>
 
