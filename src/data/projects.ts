@@ -39,9 +39,9 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "000-cafe-website",
-    title: "Cafe Lumiere（カフェ ルミエール）公式Webサイト",
+    title: "Cafe Lumiere（カフェ ルミエール）公式Webサイト【サンプル】",
     description:
-      "東京・渋谷 神宮前のカフェ「ルミエール」の公式Webサイト。SSG・Framer Motionアニメーション・お問い合わせフォーム（Zodバリデーション・Resendメール送信）・JSON-LD/sitemap/robots SEO対応を完備。216テスト全PASS、カバレッジ81.59%達成。",
+      "【デモ案件】架空のカフェを題材にしたサンプルプロジェクト。SSG・Framer Motionアニメーション・お問い合わせフォーム（Zodバリデーション・Resendメール送信）・JSON-LD/sitemap/robots SEO対応を完備。216テスト全PASS、カバレッジ81.59%達成。",
     techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Framer Motion", "React Hook Form", "Zod", "Resend"],
     duration: "自動開発",
     status: "completed",
