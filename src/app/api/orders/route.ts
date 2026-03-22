@@ -5,7 +5,7 @@ import { orderSchema } from "@/lib/validators/order";
 import { getStorageAdapter } from "@/lib/storage/adapter";
 import { checkRateLimit } from "@/lib/rateLimit";
 import { formatDate, slugify } from "@/lib/utils";
-import { sendOrderConfirmation } from "@/lib/email";
+import { sendOrderConfirmation, sendOwnerNotification } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   // レートリミット
@@ -85,6 +85,15 @@ ${data.techRequirements ?? "特に指定なし"}
     projectName: data.projectName,
     orderId,
   }).catch((err) => console.error("[api/orders] 受注確認メール送信失敗:", err));
+
+  // 運営への通知メール
+  sendOwnerNotification({
+    contactName: data.contactName,
+    contactEmail: data.contactEmail,
+    projectName: data.projectName,
+    overview: data.overview,
+    orderId,
+  }).catch((err) => console.error("[api/orders] 運営通知メール送信失敗:", err));
 
   // エージェントをバックグラウンドで起動（応答は待たない）
   try {

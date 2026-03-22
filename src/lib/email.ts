@@ -6,6 +6,7 @@ const resend = process.env.RESEND_API_KEY
 
 const FROM_ADDRESS = "AI Company <onboarding@resend.dev>";
 const COMPANY_NAME = "AI Company";
+const OWNER_EMAIL = process.env.OWNER_EMAIL ?? "fengyinqiye@gmail.com";
 
 export async function sendOrderConfirmation(params: {
   to: string;
@@ -105,6 +106,43 @@ export async function sendDeliveryNotification(params: {
 
   <hr style="border: none; border-top: 1px solid #e0ddd8; margin: 32px 0;">
   <p style="color: #88857f; font-size: 12px;">${COMPANY_NAME} — Fully automated AI development</p>
+</body>
+</html>
+    `.trim(),
+  });
+}
+
+export async function sendOwnerNotification(params: {
+  contactName: string;
+  contactEmail: string;
+  projectName: string;
+  overview: string;
+  orderId: string;
+}): Promise<void> {
+  if (!resend) return;
+
+  const { contactName, contactEmail, projectName, overview, orderId } = params;
+
+  await resend.emails.send({
+    from: FROM_ADDRESS,
+    to: OWNER_EMAIL,
+    subject: `【新規受注】${projectName}`,
+    html: `
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta charset="UTF-8"></head>
+<body style="font-family: sans-serif; color: #111; background: #fafaf8; padding: 32px;">
+  <h2 style="font-size: 18px;">新しい案件依頼が届きました</h2>
+
+  <table style="border-collapse: collapse; margin: 24px 0; width: 100%;">
+    <tr><td style="padding: 6px 16px 6px 0; color: #88857f; font-size: 13px;">案件ID</td><td style="font-family: monospace; font-size: 13px;">${orderId}</td></tr>
+    <tr><td style="padding: 6px 16px 6px 0; color: #88857f; font-size: 13px;">案件名</td><td style="font-weight: bold;">${projectName}</td></tr>
+    <tr><td style="padding: 6px 16px 6px 0; color: #88857f; font-size: 13px;">依頼者</td><td>${contactName}（${contactEmail}）</td></tr>
+    <tr><td style="padding: 6px 16px 6px 0; color: #88857f; font-size: 13px; vertical-align: top;">概要</td><td>${overview}</td></tr>
+  </table>
+
+  <hr style="border: none; border-top: 1px solid #e0ddd8; margin: 32px 0;">
+  <p style="color: #88857f; font-size: 12px;">${COMPANY_NAME} 自動通知</p>
 </body>
 </html>
     `.trim(),
