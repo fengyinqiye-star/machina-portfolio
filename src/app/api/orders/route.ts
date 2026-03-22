@@ -48,7 +48,8 @@ export async function POST(request: NextRequest) {
 
   // 保存
   const timestamp = formatDate(new Date());
-  const orderId = `${timestamp}-${slugify(data.projectName)}`;
+  const slug = slugify(data.projectName) || "untitled";
+  const orderId = `${timestamp}-${slug}`;
 
   const content = `# 案件依頼: ${data.projectName}
 
