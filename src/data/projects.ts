@@ -37,4 +37,15 @@ export const PROJECTS: Project[] = [
     highlight: "実績第3号 — 時計・ストップウォッチ・タイマー三位一体アプリ",
     url: "https://ai-company-2026-03-21-clock-timer-52i0y013e.vercel.app",
   },
+  {
+    id: "000-cafe-website",
+    title: "Cafe Lumiere（カフェ ルミエール）公式Webサイト",
+    description:
+      "東京・渋谷 神宮前のカフェ「ルミエール」の公式Webサイト。SSG・Framer Motionアニメーション・お問い合わせフォーム（Zodバリデーション・Resendメール送信）・JSON-LD/sitemap/robots SEO対応を完備。216テスト全PASS、カバレッジ81.59%達成。",
+    techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Framer Motion", "React Hook Form", "Zod", "Resend"],
+    duration: "自動開発",
+    status: "completed",
+    highlight: "実績第4号 — カフェブランドサイト全自動納品",
+    url: "https://ai-company-000-cafe-website-6p9co2h0i-sakinos-projects-c7083b33.vercel.app",
+  },
 ];

@@ -6,36 +6,72 @@ const ROOT = path.resolve(process.cwd(), "..", "..");
 const ORDERS_DIR = path.join(ROOT, "orders");
 const LOGS_DIR = path.join(ROOT, "logs");
 const DELIVERABLES_DIR = path.join(ROOT, "deliverables");
-
 const SPECS_DIR = path.join(ROOT, "specs");
 const DESIGNS_DIR = path.join(ROOT, "designs");
+const SRC_DIR = path.join(ROOT, "src");
+
+function countFiles(dir: string): number {
+  if (!fs.existsSync(dir)) return 0;
+  let count = 0;
+  const walk = (d: string) => {
+    for (const f of fs.readdirSync(d)) {
+      const full = path.join(d, f);
+      if (f === "node_modules" || f === ".next") continue;
+      if (fs.statSync(full).isDirectory()) walk(full);
+      else count++;
+    }
+  };
+  walk(dir);
+  return count;
+}
+
+function getAgentSteps(orderId: string) {
+  const orderDir = path.join(ORDERS_DIR, orderId);
+  const srcDir = path.join(SRC_DIR, orderId);
+  const specsDir = path.join(SPECS_DIR, orderId);
+  const designsDir = path.join(DESIGNS_DIR, orderId);
+  const deliverablesDir = path.join(DELIVERABLES_DIR, orderId);
+
+  const hasSales = fs.existsSync(path.join(orderDir, "sales-analysis.md"));
+  const hasSpecs = fs.existsSync(specsDir) && fs.readdirSync(specsDir).length > 0;
+  const hasDesigns = fs.existsSync(designsDir) && fs.readdirSync(designsDir).length > 0;
+  const hasSrc = fs.existsSync(srcDir) && fs.readdirSync(srcDir).filter(f => f !== "node_modules").length > 0;
+  const srcFileCount = hasSrc ? countFiles(srcDir) : 0;
+  const hasTests = hasSrc && (
+    fs.existsSync(path.join(srcDir, "__tests__")) ||
+    fs.existsSync(path.join(srcDir, "tests")) ||
+    fs.existsSync(path.join(srcDir, "src", "__tests__"))
+  );
+  const hasDeliverables = fs.existsSync(deliverablesDir);
+  const hasFailed = fs.existsSync(path.join(orderDir, ".failed"));
+
+  const steps = [
+    { label: "受注", done: true },
+    { label: "見積", done: hasSales },
+    { label: "要件定義", done: hasSpecs, detail: hasSpecs ? `${fs.readdirSync(specsDir).length}ファイル` : undefined },
+    { label: "設計", done: hasDesigns, detail: hasDesigns ? `${fs.readdirSync(designsDir).length}ファイル` : undefined },
+    { label: "実装", done: hasDeliverables || hasTests, active: hasSrc && !hasTests && !hasDeliverables, detail: hasSrc ? `${srcFileCount}ファイル作成済み` : undefined },
+    { label: "QA・レビュー", done: hasDeliverables, active: hasTests && !hasDeliverables },
+    { label: "納品", done: hasDeliverables },
+  ];
+
+  const currentLabel = hasFailed ? "❌ エラー停止"
+    : hasDeliverables ? "✅ 納品完了"
+    : hasTests ? "🔍 QA・レビュー中"
+    : hasSrc ? `💻 実装中 (${srcFileCount}ファイル)`
+    : hasDesigns ? "🏗 設計完了"
+    : hasSpecs ? "📐 要件定義完了"
+    : hasSales ? "📋 見積完了"
+    : "⏳ 受付済み";
+
+  return { steps, currentLabel };
+}
 
 function getOrderStatus(orderId: string): "completed" | "processing" | "failed" | "pending" {
   if (fs.existsSync(path.join(DELIVERABLES_DIR, orderId))) return "completed";
   if (fs.existsSync(path.join(ORDERS_DIR, orderId, ".failed"))) return "failed";
   if (fs.existsSync(path.join(ORDERS_DIR, orderId, ".processing"))) return "processing";
   return "pending";
-}
-
-function getCurrentStep(orderId: string): string {
-  if (fs.existsSync(path.join(DELIVERABLES_DIR, orderId))) return "✅ 納品完了";
-  if (fs.existsSync(path.join(ORDERS_DIR, orderId, ".failed"))) return "❌ エラー停止";
-
-  const srcDir = path.join(ROOT, "src", orderId);
-  const hasSrc = fs.existsSync(srcDir) && fs.readdirSync(srcDir).length > 0;
-  if (hasSrc) {
-    const hasTests = fs.existsSync(path.join(srcDir, "__tests__")) || fs.existsSync(path.join(srcDir, "tests"));
-    if (hasTests) return "🔍 QA・レビュー中";
-    return "💻 実装中";
-  }
-
-  if (fs.existsSync(path.join(DESIGNS_DIR, orderId))) return "🏗 設計完了 → 実装待ち";
-  if (fs.existsSync(path.join(SPECS_DIR, orderId))) return "📐 要件定義完了 → 設計待ち";
-
-  const hasContract = fs.existsSync(path.join(ORDERS_DIR, orderId, "sales-analysis.md"));
-  if (hasContract) return "📋 見積完了 → 開発待ち";
-
-  return "⏳ 受付済み";
 }
 
 function getOrders() {
@@ -48,12 +84,12 @@ function getOrders() {
       const projectName = brief.match(/^# 案件依頼: (.+)/m)?.[1] ?? id;
       const contactName = brief.match(/- お名前: (.+)/m)?.[1] ?? "不明";
       const status = getOrderStatus(id);
-      const step = getCurrentStep(id);
+      const { steps, currentLabel } = getAgentSteps(id);
       const processingPath = path.join(ORDERS_DIR, id, ".processing");
       const elapsedSec = status === "processing" && fs.existsSync(processingPath)
         ? Math.floor((Date.now() - fs.statSync(processingPath).mtimeMs) / 1000)
         : null;
-      return { id, projectName, contactName, status, step, elapsedSec };
+      return { id, projectName, contactName, status, step: currentLabel, steps, elapsedSec };
     })
     .sort((a, b) => a.id.localeCompare(b.id));
 }
