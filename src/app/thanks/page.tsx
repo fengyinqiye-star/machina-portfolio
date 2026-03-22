@@ -1,7 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/atoms/Button";
 
 export default function ThanksPage() {
+  const searchParams = useSearchParams();
+  const isMaintenance = searchParams.get("maintenance") === "true";
+
   return (
     <main className="min-h-screen flex items-center justify-center bg-[var(--bg)] px-6">
       <div className="text-center max-w-lg">
@@ -14,19 +20,33 @@ export default function ThanksPage() {
           </svg>
         </div>
         <p className="text-xs tracking-widest uppercase mb-4" style={{ color: "var(--accent)" }}>
-          Received
+          {isMaintenance ? "Subscribed" : "Received"}
         </p>
         <h1 className="text-3xl md:text-4xl font-bold text-[var(--text)] mb-4">
-          受付完了しました
+          {isMaintenance ? "保守プランに加入しました" : "受付完了しました"}
         </h1>
-        <p className="text-[var(--muted)] mb-2 leading-relaxed">
-          案件のご依頼ありがとうございます。
-        </p>
-        <p className="text-[var(--muted)] mb-10 leading-relaxed">
-          AIオーケストレーターが内容を分析し、
-          担当エージェントチームが順次対応を開始します。
-          ご入力いただいたメールアドレスへご連絡いたします。
-        </p>
+        {isMaintenance ? (
+          <>
+            <p className="text-[var(--muted)] mb-2 leading-relaxed">
+              保守プランへのご加入ありがとうございます。
+            </p>
+            <p className="text-[var(--muted)] mb-10 leading-relaxed">
+              ホスティングの維持・修正対応を継続して行います。
+              ご要望はいつでもフィードバックフォームからお送りください。
+            </p>
+          </>
+        ) : (
+          <>
+            <p className="text-[var(--muted)] mb-2 leading-relaxed">
+              案件のご依頼ありがとうございます。
+            </p>
+            <p className="text-[var(--muted)] mb-10 leading-relaxed">
+              AIオーケストレーターが内容を分析し、
+              担当エージェントチームが順次対応を開始します。
+              ご入力いただいたメールアドレスへご連絡いたします。
+            </p>
+          </>
+        )}
         <Link href="/">
           <Button variant="primary">トップページへ戻る</Button>
         </Link>
