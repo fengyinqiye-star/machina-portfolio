@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { spawn } from "child_process";
-import path from "path";
 import { orderSchema } from "@/lib/validators/order";
 import { getStorageAdapter } from "@/lib/storage/adapter";
 import { checkRateLimit } from "@/lib/rateLimit";
@@ -96,18 +94,8 @@ ${data.techRequirements ?? "特に指定なし"}
     orderId,
   }).catch((err) => console.error("[api/orders] 運営通知メール送信失敗:", err));
 
-  // エージェントをバックグラウンドで起動（応答は待たない）
-  try {
-    const triggerScript = path.resolve(process.cwd(), "..", "..", "..", "scripts", "trigger-order.sh");
-    const agent = spawn("bash", [triggerScript, orderId], {
-      detached: true,
-      stdio: "ignore",
-      cwd: path.resolve(process.cwd(), "..", "..", ".."),
-    });
-    agent.unref();
-  } catch (err) {
-    console.error("[api/orders] エージェント起動失敗（案件は保存済み）:", err);
-  }
+  // エージェントはcheck-new-orders.shが起動する（支払い確認後に開発開始）
+  // Phase1（見積もり・支払いリンク送付）はcronで自動実行される
 
   return NextResponse.json({ success: true, orderId }, { status: 201 });
 }

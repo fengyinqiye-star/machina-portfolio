@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { spawn } from "child_process";
 import path from "path";
 import { stripe } from "@/lib/stripe";
 
@@ -52,18 +51,35 @@ export async function POST(request: NextRequest) {
     const orderId = session.metadata?.orderId;
 
     if (session.mode === "payment" && orderId) {
-      console.log(`[stripe/webhook] 支払い完了: ${orderId} — 開発開始`);
+      console.log(`[stripe/webhook] 支払い完了: ${orderId} — payment-received.md をBlobに保存`);
 
+      // Vercel Blob に payment-received.md を書き込む
+      // → check-new-orders.sh がローカルに同期して開発をトリガーする
       try {
-        const triggerScript = path.resolve(process.cwd(), "..", "..", "..", "scripts", "trigger-order.sh");
-        const agent = spawn("bash", [triggerScript, orderId], {
-          detached: true,
-          stdio: "ignore",
-          cwd: path.resolve(process.cwd(), "..", "..", ".."),
+        const { put } = await import("@vercel/blob");
+        const content = `# 支払い完了\n\n受付日時: ${new Date().toISOString()}\n案件ID: ${orderId}\n`;
+        await put(`orders/${orderId}/payment-received.md`, content, {
+          access: "private",
+          contentType: "text/markdown",
         });
-        agent.unref();
+        console.log(`[stripe/webhook] payment-received.md 保存完了: ${orderId}`);
       } catch (err) {
-        console.error("[stripe/webhook] エージェント起動失敗:", err);
+        console.error("[stripe/webhook] Blob書き込み失敗:", err);
+        // ローカル環境ではフォールバックとして直接トリガー
+        if (!process.env.VERCEL_ENV) {
+          try {
+            const { spawn } = await import("child_process");
+            const triggerScript = path.resolve(process.cwd(), "..", "..", "..", "scripts", "trigger-order.sh");
+            const agent = spawn("bash", [triggerScript, orderId], {
+              detached: true,
+              stdio: "ignore",
+              cwd: path.resolve(process.cwd(), "..", "..", ".."),
+            });
+            agent.unref();
+          } catch (e) {
+            console.error("[stripe/webhook] ローカルトリガー失敗:", e);
+          }
+        }
       }
     }
 
