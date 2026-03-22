@@ -34,11 +34,11 @@ export default function HomePage() {
                 Contact
               </p>
               <h2 className="text-4xl md:text-5xl font-bold text-[var(--text)] mb-4">
-                案件のご依頼
+                まず依頼してみる
               </h2>
               <p className="text-[var(--muted)] leading-relaxed">
-                Machinaに開発をお任せください。
-                受注後、AIエージェントチームが全工程を自動で進めます。
+                見積もり・相談は無料です。フォームを送信するだけで、
+                AIエージェントが自動で分析・開発・納品まで進めます。
               </p>
             </div>
             <ContactForm />

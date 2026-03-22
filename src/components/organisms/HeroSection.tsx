@@ -29,46 +29,52 @@ export function HeroSection() {
             className="w-1.5 h-1.5 rounded-full animate-pulse"
             style={{ backgroundColor: "var(--accent)" }}
           />
-          AIエージェントが受注から納品まで全自動
+          フォームを送信するだけ — あとはAIが全部やる
         </div>
 
         {/* Main heading */}
         <h1 className="text-6xl md:text-8xl lg:text-[8rem] font-bold leading-[1.0] tracking-tight text-[var(--text)] mb-8">
-          AIが作る、
+          依頼から
           <br />
-          <span style={{ color: "var(--accent)" }}>AIを紹介する。</span>
+          <span style={{ color: "var(--accent)" }}>納品まで全自動。</span>
         </h1>
 
-        <p className="text-base md:text-lg text-[var(--muted)] max-w-xl mb-14 leading-relaxed">
-          複数の専門AIサブエージェントが協調し、
+        <p className="text-base md:text-lg text-[var(--muted)] max-w-xl mb-6 leading-relaxed">
+          要件定義・設計・実装・テスト・デプロイ——
           <br />
-          受注から納品まで全工程を完全自動化します。
+          13のAIエージェントが24時間以内に動くものを届けます。
+        </p>
+
+        {/* Social proof */}
+        <p className="text-sm text-[var(--muted)] mb-10">
+          <span style={{ color: "var(--accent)" }} className="font-bold">実績4件・テストカバレッジ平均89%</span>
+          　|　納品後30日間無償サポート
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4">
           <a
-            href="#contact"
+            href="/#contact"
             className="inline-flex items-center gap-2 px-8 py-4 text-sm font-semibold text-black hover:opacity-90 transition-opacity"
             style={{ backgroundColor: "var(--accent)" }}
           >
-            案件を依頼する
+            無料で依頼する
             <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </a>
           <a
-            href="#services"
+            href="/#projects"
             className="inline-flex items-center gap-2 px-8 py-4 border border-[var(--border)] text-sm font-semibold text-[var(--text)] hover:border-[var(--muted)] transition-colors"
           >
-            仕組みを見る
+            実績を見る
           </a>
         </div>
 
         {/* Stats */}
         <div className="mt-24 pt-8 border-t border-[var(--border)] grid grid-cols-3 gap-8 max-w-sm">
           <div>
-            <div className="text-3xl font-bold tabular-nums text-[var(--text)]">12</div>
-            <div className="text-xs text-[var(--muted)] mt-1 tracking-wide">AIエージェント</div>
+            <div className="text-3xl font-bold tabular-nums text-[var(--text)]">24h</div>
+            <div className="text-xs text-[var(--muted)] mt-1 tracking-wide">平均納品時間</div>
           </div>
           <div>
             <div className="text-3xl font-bold tabular-nums text-[var(--text)]">100%</div>
@@ -76,9 +82,9 @@ export function HeroSection() {
           </div>
           <div>
             <div className="text-3xl font-bold tabular-nums" style={{ color: "var(--accent)" }}>
-              #001
+              ¥0
             </div>
-            <div className="text-xs text-[var(--muted)] mt-1 tracking-wide">実績</div>
+            <div className="text-xs text-[var(--muted)] mt-1 tracking-wide">相談・見積もり</div>
           </div>
         </div>
       </div>
