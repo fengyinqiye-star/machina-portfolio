@@ -82,6 +82,17 @@ export const PROJECTS: Project[] = [
     url: "",
   },
   {
+    id: "2026-03-23T00-00-03-dental-clinic",
+    title: "なかむら歯科クリニック ホームページ",
+    description:
+      "開業5年・スタッフ10名の地域密着型歯科医院の公式サイト。一般歯科・小児歯科・矯正・ホワイトニングの診療案内から、スマホ対応WEB予約フォーム・FAQアコーディオン・Googleマップ連携まで完備。白×ミントグリーンの清潔感あるデザインとFremer Motionアニメーションで患者のエンゲージメントを高める。",
+    techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Framer Motion", "Resend", "React Hook Form", "Zod"],
+    duration: "自動開発",
+    status: "completed",
+    highlight: "実績第9号 — 歯科クリニック公式サイト（WEB予約対応）",
+    url: "https://ai-company-2026-03-23t00-00-03-kvbpp6sgn.vercel.app",
+  },
+  {
     id: "2026-03-23T00-00-07-fitness-gym",
     title: "IRON GATE FITNESS コーポレートサイト",
     description:
