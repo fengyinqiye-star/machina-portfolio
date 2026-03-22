@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 
 export const stripe = process.env.STRIPE_SECRET_KEY
-  ? new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: "2025-02-24.acacia" })
+  ? new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: "2026-02-25.clover" })
   : null;
 
 /**
@@ -19,7 +19,7 @@ export async function createPaymentLink(params: {
     return null;
   }
 
-  const { orderId, projectName, amountJpy, contactEmail } = params;
+  const { orderId, projectName, amountJpy } = params;
 
   // 1. Productを作成
   const product = await stripe.products.create({
