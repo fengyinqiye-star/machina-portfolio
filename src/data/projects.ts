@@ -57,6 +57,6 @@ export const PROJECTS: Project[] = [
     duration: "自動開発",
     status: "completed",
     highlight: "実績第5号 — 観光地レコメンド＆周遊ルート可視化アプリ",
-    url: "https://ai-company-tourism-app.vercel.app",
+    url: "https://ai-company-2026-03-22t11-27-00-mhj6jyhdr.vercel.app",
   },
 ];
