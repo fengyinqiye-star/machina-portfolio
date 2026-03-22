@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ThemeToggle } from "@/components/atoms/ThemeToggle";
+import { ScrambleText } from "@/components/atoms/ScrambleText";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -19,7 +20,7 @@ export function NavBar() {
     <header className="sticky top-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
       <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="font-bold text-lg tracking-tight text-[var(--text)]">
-          Machina<span className="text-[var(--accent)]">.</span>
+          <ScrambleText text="Machina" /><span className="text-[var(--accent)]">.</span>
         </Link>
 
         {/* Desktop nav */}
