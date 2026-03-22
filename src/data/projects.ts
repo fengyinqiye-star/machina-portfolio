@@ -59,4 +59,15 @@ export const PROJECTS: Project[] = [
     highlight: "実績第5号 — 観光地レコメンド＆周遊ルート可視化アプリ",
     url: "https://ai-company-2026-03-22t11-27-00-mhj6jyhdr.vercel.app",
   },
+  {
+    id: "2026-03-22T13-48-34-e2eexgpvvlp",
+    title: "E2Eテスト用シンプルLP",
+    description:
+      "Next.js 14 + Tailwind CSS + Framer Motion で構築したシンプルなランディングページ。フルブリードヒーロー・カード禁止・アクセントカラー1色のOpenAIデザイン原則を厳守。Jest 36テスト全PASS、カバレッジ100%達成。",
+    techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Framer Motion", "Jest", "React Testing Library"],
+    duration: "自動開発",
+    status: "completed",
+    highlight: "実績第6号 — E2Eテスト用シンプルランディングページ",
+    url: "https://ai-company-2026-03-22t13-48-34-e2eexgpvvlp-67qixa5dv.vercel.app",
+  },
 ];
