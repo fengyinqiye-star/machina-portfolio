@@ -4,9 +4,24 @@ import { ServicesSection } from "@/components/organisms/ServicesSection";
 import { ProjectsSection } from "@/components/organisms/ProjectsSection";
 import { ContactForm } from "@/components/organisms/ContactForm";
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "AI Company",
+  url: "https://ai-company-portfolio.vercel.app",
+  description: "複数のAIサブエージェントが協調し、受注から納品まで全自動でソフトウェア開発を行う会社。",
+  serviceType: "ソフトウェア開発",
+  areaServed: "JP",
+  availableLanguage: "Japanese",
+};
+
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <NavBar />
       <main>
         <HeroSection />
