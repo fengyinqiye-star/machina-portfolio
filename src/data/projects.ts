@@ -79,7 +79,7 @@ export const PROJECTS: Project[] = [
     duration: "自動開発",
     status: "completed",
     highlight: "実績第7号 — 地域密着型不動産コーポレートサイト",
-    url: "",
+    url: "https://ai-company-2026-03-23t00-00-02-real-estate-7wzm7ktif.vercel.app",
   },
   {
     id: "2026-03-23T00-00-03-dental-clinic",
