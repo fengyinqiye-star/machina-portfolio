@@ -17,7 +17,7 @@ export function ScrambleText({
   triggerOnMount = true,
   speed = 40,
 }: ScrambleTextProps) {
-  const [display, setDisplay] = useState(triggerOnMount ? "" : text);
+  const [display, setDisplay] = useState(text); // SSR互換：初期は必ずtextを表示
   const frameRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const iterRef = useRef(0);
 
