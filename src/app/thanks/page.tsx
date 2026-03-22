@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { Button } from "@/components/atoms/Button";
 
-export default function ThanksPage() {
+function ThanksContent() {
   const searchParams = useSearchParams();
   const isMaintenance = searchParams.get("maintenance") === "true";
 
@@ -52,5 +53,13 @@ export default function ThanksPage() {
         </Link>
       </div>
     </main>
+  );
+}
+
+export default function ThanksPage() {
+  return (
+    <Suspense>
+      <ThanksContent />
+    </Suspense>
   );
 }

@@ -48,4 +48,15 @@ export const PROJECTS: Project[] = [
     highlight: "実績第4号 — カフェブランドサイト全自動納品",
     url: "https://ai-company-000-cafe-website-6p9co2h0i-sakinos-projects-c7083b33.vercel.app",
   },
+  {
+    id: "2026-03-22T11-27-00-tourism-recommend",
+    title: "おすすめ観光スポット — 観光地レコメンド＆周遊ルートアプリ",
+    description:
+      "エリア名を入力するとおすすめ観光スポットが一覧表示され、Leaflet地図上でマーカー確認・周遊ルートのポリライン描画ができるWebアプリ。外部API不要・Vercel無料運用。19スイート155テスト全PASS、カバレッジ96.58%達成。",
+    techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Leaflet", "react-leaflet", "OpenStreetMap", "Jest", "React Testing Library"],
+    duration: "自動開発",
+    status: "completed",
+    highlight: "実績第5号 — 観光地レコメンド＆周遊ルート可視化アプリ",
+    url: "https://ai-company-tourism-app.vercel.app",
+  },
 ];
