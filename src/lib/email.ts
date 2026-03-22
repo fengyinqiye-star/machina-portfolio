@@ -4,8 +4,8 @@ const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null;
 
-const FROM_ADDRESS = "AI Company <noreply@ai-company.dev>";
-const COMPANY_NAME = "AI Company";
+const FROM_ADDRESS = "Machina <noreply@ai-company.dev>";
+const COMPANY_NAME = "Machina";
 const OWNER_EMAIL = process.env.OWNER_EMAIL ?? "fengyinqiye@gmail.com";
 
 export async function sendOrderConfirmation(params: {
@@ -51,7 +51,7 @@ export async function sendOrderConfirmation(params: {
   完了次第、納品完了の通知をお送りします。</p>
 
   <hr style="border: none; border-top: 1px solid #e0ddd8; margin: 32px 0;">
-  <p style="color: #88857f; font-size: 12px;">${COMPANY_NAME} — Fully automated AI development</p>
+  <p style="color: #88857f; font-size: 12px;">${COMPANY_NAME} — Automated Development</p>
 </body>
 </html>
     `.trim(),
@@ -105,7 +105,7 @@ export async function sendDeliveryNotification(params: {
   README.md に従ってセットアップすることでご利用いただけます。</p>
 
   <hr style="border: none; border-top: 1px solid #e0ddd8; margin: 32px 0;">
-  <p style="color: #88857f; font-size: 12px;">${COMPANY_NAME} — Fully automated AI development</p>
+  <p style="color: #88857f; font-size: 12px;">${COMPANY_NAME} — Automated Development</p>
 </body>
 </html>
     `.trim(),

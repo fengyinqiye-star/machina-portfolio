@@ -7,7 +7,7 @@ import { ContactForm } from "@/components/organisms/ContactForm";
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "AI Company",
+  name: "Machina",
   url: "https://ai-company.dev",
   description: "複数のAIサブエージェントが協調し、受注から納品まで全自動でソフトウェア開発を行う会社。",
   serviceType: "ソフトウェア開発",
@@ -37,7 +37,7 @@ export default function HomePage() {
                 案件のご依頼
               </h2>
               <p className="text-[var(--muted)] leading-relaxed">
-                AIカンパニーに開発をお任せください。
+                Machinaに開発をお任せください。
                 受注後、AIエージェントチームが全工程を自動で進めます。
               </p>
             </div>
@@ -46,7 +46,7 @@ export default function HomePage() {
         </section>
       </main>
       <footer className="py-10 text-center text-xs text-[var(--muted)] border-t border-[var(--border)]">
-        <p>© 2026 AI Company. All rights reserved.</p>
+        <p>© 2026 Machina. All rights reserved.</p>
         <p className="mt-1">このサイトはAIエージェントによって自動開発されました。</p>
       </footer>
     </>

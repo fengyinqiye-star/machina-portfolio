@@ -7,7 +7,7 @@ import type { Project } from "@/types";
 export const PROJECTS: Project[] = [
   {
     id: "001-portfolio-site",
-    title: "AIカンパニー ポートフォリオサイト",
+    title: "Machina ポートフォリオサイト",
     description:
       "AIエージェントによる自動開発サービスを紹介するこのサイト自体。受注→要件定義→設計→実装→テスト→レビュー→納品の全工程をAIエージェントが自動実行。",
     techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Vercel"],

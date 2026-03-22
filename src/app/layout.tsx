@@ -14,25 +14,25 @@ const siteUrl = "https://ai-company.dev";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "AI Company - AIエージェントによる自動ソフトウェア開発",
-    template: "%s | AI Company",
+    default: "Machina - AIエージェントによる自動ソフトウェア開発",
+    template: "%s | Machina",
   },
   description:
     "複数のAIサブエージェントが協調し、受注から納品まで全自動でソフトウェア開発を行う会社。Webアプリ・業務システムの開発をAIにお任せください。",
   keywords: ["AIエージェント", "ソフトウェア開発", "自動化", "Webアプリ開発", "AI開発", "Next.js", "受託開発"],
-  authors: [{ name: "AI Company" }],
-  creator: "AI Company",
+  authors: [{ name: "Machina" }],
+  creator: "Machina",
   openGraph: {
-    title: "AI Company - AIエージェントによる自動ソフトウェア開発",
+    title: "Machina - AIエージェントによる自動ソフトウェア開発",
     description: "複数のAIサブエージェントが協調し、受注から納品まで全自動でソフトウェア開発を行う会社。",
     url: siteUrl,
-    siteName: "AI Company",
+    siteName: "Machina",
     locale: "ja_JP",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Company - AIエージェントによる自動ソフトウェア開発",
+    title: "Machina - AIエージェントによる自動ソフトウェア開発",
     description: "複数のAIサブエージェントが協調し、受注から納品まで全自動でソフトウェア開発を行う会社。",
   },
   alternates: {

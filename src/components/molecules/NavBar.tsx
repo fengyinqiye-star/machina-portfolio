@@ -19,7 +19,7 @@ export function NavBar() {
     <header className="sticky top-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
       <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="font-bold text-lg tracking-tight text-[var(--text)]">
-          AI<span className="text-[var(--accent)]">.</span>Company
+          Machina<span className="text-[var(--accent)]">.</span>
         </Link>
 
         {/* Desktop nav */}

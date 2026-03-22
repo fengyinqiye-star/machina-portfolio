@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "料金プラン",
-  description: "AI Companyの開発費用・保守プランの料金一覧。受注から納品まで全自動のAI開発サービス。",
+  description: "Machinaの開発費用・保守プランの料金一覧。受注から納品まで全自動のAI開発サービス。",
 };
 
 const DEV_PLANS = [
@@ -254,7 +254,7 @@ export default function PricingPage() {
         </section>
       </main>
       <footer className="py-10 text-center text-xs text-[var(--muted)] border-t border-[var(--border)]">
-        <p>© 2026 AI Company. All rights reserved.</p>
+        <p>© 2026 Machina. All rights reserved.</p>
       </footer>
     </>
   );

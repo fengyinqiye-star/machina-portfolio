@@ -29,10 +29,11 @@ export function ServicesSection() {
             How it works
           </p>
           <h2 className="text-4xl md:text-5xl font-bold text-[var(--text)] mb-4">
-            AIカンパニーの仕組み
+            Machinaの仕組み
           </h2>
           <p className="text-[var(--muted)] max-w-lg leading-relaxed">
             11の専門AIサブエージェントが協調し、人間のソフトウェア開発会社と同じワークフローを全自動で実行します。
+
           </p>
         </div>
 
