@@ -4,7 +4,7 @@ const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null;
 
-const FROM_ADDRESS = "AI Company <onboarding@resend.dev>";
+const FROM_ADDRESS = "AI Company <noreply@ai-company.dev>";
 const COMPANY_NAME = "AI Company";
 const OWNER_EMAIL = process.env.OWNER_EMAIL ?? "fengyinqiye@gmail.com";
 
