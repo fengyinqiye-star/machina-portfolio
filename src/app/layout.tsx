@@ -9,7 +9,7 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 });
 
-const siteUrl = "https://ai-company-portfolio.vercel.app";
+const siteUrl = "https://ai-company.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

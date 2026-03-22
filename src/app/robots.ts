@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/", "/status"],
     },
-    sitemap: "https://ai-company-portfolio.vercel.app/sitemap.xml",
+    sitemap: "https://ai-company.dev/sitemap.xml",
   };
 }

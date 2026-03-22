@@ -8,7 +8,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "AI Company",
-  url: "https://ai-company-portfolio.vercel.app",
+  url: "https://ai-company.dev",
   description: "複数のAIサブエージェントが協調し、受注から納品まで全自動でソフトウェア開発を行う会社。",
   serviceType: "ソフトウェア開発",
   areaServed: "JP",
