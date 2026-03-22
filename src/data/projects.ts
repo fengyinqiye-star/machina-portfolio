@@ -24,6 +24,7 @@ export const PROJECTS: Project[] = [
     duration: "自動開発",
     status: "completed",
     highlight: "実績第2号 — フォーム受注から全自動納品",
+    url: "https://ai-company-002-todo-b5l7k2y7s-sakinos-projects-c7083b33.vercel.app",
   },
   {
     id: "2026-03-21-clock-timer-app",
