@@ -4,7 +4,7 @@ const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null;
 
-const FROM_ADDRESS = "AI Company <noreply@resend.dev>";
+const FROM_ADDRESS = "AI Company <onboarding@resend.dev>";
 const COMPANY_NAME = "AI Company";
 
 export async function sendOrderConfirmation(params: {
