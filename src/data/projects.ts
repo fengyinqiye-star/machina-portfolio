@@ -68,6 +68,6 @@ export const PROJECTS: Project[] = [
     duration: "自動開発",
     status: "completed",
     highlight: "実績第6号 — E2Eテスト用シンプルランディングページ",
-    url: "https://ai-company-2026-03-22t13-48-34-e2eexgpvvlp-67qixa5dv.vercel.app",
+    url: "https://ai-company-2026-03-22t13-48-34-e2eexgpvvlp-a4w4x68hn.vercel.app",
   },
 ];
