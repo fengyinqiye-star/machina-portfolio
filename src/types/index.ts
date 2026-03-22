@@ -16,6 +16,7 @@ export interface Project {
   duration: string;
   status: "completed" | "in-progress";
   highlight?: string;
+  url?: string;
 }
 
 export interface ApiResponse<T = unknown> {
