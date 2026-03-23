@@ -136,4 +136,26 @@ export const PROJECTS: Project[] = [
     highlight: "実績第12号 — ITコンサルティング会社ランディングページ（DX特化）",
     url: "https://ai-company-2026-03-23t00-00-06-1y3hhvteu.vercel.app",
   },
+  {
+    id: "2026-03-23T00-00-04-beauty-salon",
+    title: "LUMIÈRE BEAUTY SALON ホームページ",
+    description:
+      "東京・表参道の完全個室プライベートサロンのラグジュアリー公式サイト。ゴールド×ブラック×ホワイトのデザインにFremer Motionのスクロールアニメーションを組み合わせ、スタイリスト紹介・ギャラリー（ライトボックス付き）・Resend連携のオンライン予約フォームを完備。",
+    techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Framer Motion", "Resend", "React Hook Form", "Zod"],
+    duration: "自動開発",
+    status: "completed",
+    highlight: "実績第13号 — ラグジュアリー美容サロン公式サイト（オンライン予約対応）",
+    url: "",
+  },
+  {
+    id: "2026-03-23T00-00-08-construction",
+    title: "小林建設株式会社 コーポレートサイト",
+    description:
+      "創業45年の地域密着型工務店のコーポレートサイト。施工事例14件（新築8棟・リフォーム6事例）を掲載し、家づくりの流れ・よくある質問・資料請求フォームまで完備。アースカラーの温かみあるデザインとモバイルファーストの使いやすいナビゲーション、LocalBusiness JSON-LDによるSEO対策も実装。",
+    techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Resend", "React Hook Form", "Zod"],
+    duration: "自動開発",
+    status: "completed",
+    highlight: "実績第14号 — 建設会社コーポレートサイト（施工事例14件・SEO対応）",
+    url: "https://ai-company-2026-03-23t00-00-08-construction-6ogz4om1g.vercel.app",
+  },
 ];
