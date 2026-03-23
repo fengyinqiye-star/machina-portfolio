@@ -103,4 +103,15 @@ export const PROJECTS: Project[] = [
     highlight: "実績第8号 — プレミアムフィットネスジム コーポレートサイト",
     url: "https://ai-company-2026-03-23t00-00-07-fitne-j3gxy9p5x.vercel.app",
   },
+  {
+    id: "2026-03-23T00-00-01-law-office",
+    title: "山田・鈴木法律事務所 コーポレートサイト",
+    description:
+      "労働問題・離婚・相続・企業法務に強い弁護士2名の法律事務所コーポレートサイト。初回無料相談フォーム・ブログ/コラム・解決事例・FAQ・料金案内を完備。ネイビー×ホワイトの信頼感あるデザインと高カバレッジテスト（Stmts 94.79%）で品質を担保。",
+    techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Resend", "MDX", "Zod"],
+    duration: "自動開発",
+    status: "completed",
+    highlight: "実績第10号 — 法律事務所コーポレートサイト（SEO・無料相談フォーム対応）",
+    url: "https://ai-company-2026-03-23t00-00-01-law-office-1qfsgb0m7.vercel.app",
+  },
 ];
