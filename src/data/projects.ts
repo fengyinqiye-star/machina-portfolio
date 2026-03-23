@@ -145,7 +145,7 @@ export const PROJECTS: Project[] = [
     duration: "自動開発",
     status: "completed",
     highlight: "実績第13号 — ラグジュアリー美容サロン公式サイト（オンライン予約対応）",
-    url: "",
+    url: "https://ai-co-2026-03-23t00-00-04-beauty-qubf9m0wj.vercel.app",
   },
   {
     id: "2026-03-23T00-00-08-construction",
