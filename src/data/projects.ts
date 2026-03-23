@@ -125,4 +125,15 @@ export const PROJECTS: Project[] = [
     highlight: "実績第11号 — 会計事務所コーポレートサイト（クラウド会計・SEO特化）",
     url: "https://ai-company-2026-03-23t00-00-05-tax-accountant-l3m7l25v0.vercel.app",
   },
+  {
+    id: "2026-03-23T00-00-06-it-consulting",
+    title: "株式会社DigitalShift ITコンサルティングLP",
+    description:
+      "製造業・物流・医療に特化したDXコンサルティング会社のランディングページ。業界特化・現場定着化支援を強調した濃紺×シアンのテック感あるデザインに、カウントアップアニメーション・FAQアコーディオン・無料DX診断申込フォームを完備。",
+    techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Framer Motion", "Resend", "Zod"],
+    duration: "自動開発",
+    status: "completed",
+    highlight: "実績第12号 — ITコンサルティング会社ランディングページ（DX特化）",
+    url: "https://ai-company-2026-03-23t00-00-06-1y3hhvteu.vercel.app",
+  },
 ];
