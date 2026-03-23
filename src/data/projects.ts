@@ -114,4 +114,15 @@ export const PROJECTS: Project[] = [
     highlight: "実績第10号 — 法律事務所コーポレートサイト（SEO・無料相談フォーム対応）",
     url: "https://ai-company-2026-03-23t00-00-01-law-office-1qfsgb0m7.vercel.app",
   },
+  {
+    id: "2026-03-23T00-00-05-tax-accountant",
+    title: "佐藤会計事務所 コーポレートサイト",
+    description:
+      "創業30年・顧問先200社以上の税理士・会計事務所のコーポレートサイト。freee・マネーフォワード・弥生のクラウド会計対応実績を前面に打ち出し、料金プラン比較テーブル・対応業種別ページ・FAQアコーディオン・無料相談申込フォームを完備。ネイビー×グレーの信頼感あるデザインとJSON-LD構造化データによるSEO対策。",
+    techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Resend", "React Hook Form", "Zod"],
+    duration: "自動開発",
+    status: "completed",
+    highlight: "実績第11号 — 会計事務所コーポレートサイト（クラウド会計・SEO特化）",
+    url: "https://ai-company-2026-03-23t00-00-05-tax-accountant-l3m7l25v0.vercel.app",
+  },
 ];
