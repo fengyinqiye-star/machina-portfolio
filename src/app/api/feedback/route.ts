@@ -141,5 +141,13 @@ ${feedback}
     return NextResponse.json({ success: false, error: "保存に失敗しました" }, { status: 500 });
   }
 
+  // Webhookサーバーに修正依頼トリガーを送信
+  try {
+    const { triggerWebhook } = await import("@/lib/triggerWebhook");
+    triggerWebhook(orderId, "revision.received").catch(() => {});
+  } catch {
+    // webhook失敗は無視（保存済みなのでcheck-new-ordersが拾う）
+  }
+
   return NextResponse.json({ success: true });
 }
