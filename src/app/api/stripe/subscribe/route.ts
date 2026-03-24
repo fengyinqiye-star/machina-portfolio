@@ -3,8 +3,9 @@ import { stripe } from "@/lib/stripe";
 
 // 保守プランの価格ID（Stripeダッシュボードで作成済み）
 const PLAN_PRICES: Record<string, string> = {
-  light: "price_1TDkcnAygSCQ4JAPtAkl5kHd",    // 月額5,000円
-  standard: "price_1TDkcnAygSCQ4JAP3w4NoqTS",  // 月額10,000円
+  light: "price_1TEViUBLGjf6t2zy7fGFcp8i",     // 月額2,980円
+  standard: "price_1TEViUBLGjf6t2zypbePDQIW",  // 月額4,980円
+  premium: "price_1TEViUBLGjf6t2zy22tOaKSs",   // 月額19,800円
 };
 
 export async function GET(request: NextRequest) {

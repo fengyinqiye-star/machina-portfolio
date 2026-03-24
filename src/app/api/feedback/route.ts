@@ -100,13 +100,41 @@ export async function POST(request: NextRequest) {
 
   // Blobの既存revision数を数えて次番号を決定（クライアント送信値は使わない）
   let rev = 1;
+  let existingRevCount = 0;
   try {
     const token = process.env.BLOB_READ_WRITE_TOKEN!;
     const existing = await list({ prefix: `orders/${orderId}/revision-`, token });
-    rev = existing.blobs.length + 1;
+    existingRevCount = existing.blobs.length;
+    rev = existingRevCount + 1;
   } catch {
     // Blob取得失敗時はフォールバック（保存は続行）
   }
+
+  // --- Step 1: brief.md から顧客情報・プランを取得（保存前にプラン制限チェック） ---
+  const briefInfo = await getBriefInfo(orderId);
+
+  // --- Step 2: 保守プランによる修正回数チェック（保存前に実施してBlobへの余分な書き込みを防ぐ） ---
+  if (briefInfo?.plan === "basic") {
+    try {
+      const thisMonthCount = await countThisMonthRevisions(orderId);
+      if (thisMonthCount >= 2) {
+        if (briefInfo.toEmail) {
+          sendUpgradeMail(briefInfo.toEmail, briefInfo.contactName, briefInfo.projectName).catch(() => {});
+        }
+        return NextResponse.json(
+          {
+            success: false,
+            error: "今月の修正依頼が上限（月2回）に達しました。スタンダードプランへのアップグレードをご検討ください。",
+            upgradeUrl: "https://ai-company.dev/pricing",
+          },
+          { status: 429 }
+        );
+      }
+    } catch {
+      // チェック失敗時は通す（サービス継続優先）
+    }
+  }
+
   const content = `# 修正依頼 #${rev}: ${orderId}
 
 受付日時: ${new Date().toISOString()}
@@ -117,7 +145,7 @@ export async function POST(request: NextRequest) {
 ${feedback}
 `;
 
-  // --- Step 1: まず保存（ユーザー入力を失わない） ---
+  // --- Step 3: 保存 ---
   try {
     if (process.env.VERCEL_ENV) {
       await put(`orders/${orderId}/revision-${String(rev).padStart(3, "0")}.md`, content, {
@@ -139,32 +167,6 @@ ${feedback}
   } catch (err) {
     console.error("Feedback save error:", err);
     return NextResponse.json({ success: false, error: "保存に失敗しました" }, { status: 500 });
-  }
-
-  // --- Step 2: brief.md から顧客情報・プランを取得 ---
-  const briefInfo = await getBriefInfo(orderId);
-
-  // --- Step 3: 保守プランによる修正回数チェック（basicプランのみ） ---
-  if (briefInfo?.plan === "basic") {
-    try {
-      const count = await countThisMonthRevisions(orderId);
-      if (count > 2) {
-        // ファイルは保存済みだが、webhookは送らない（処理させない）
-        if (briefInfo.toEmail) {
-          sendUpgradeMail(briefInfo.toEmail, briefInfo.contactName, briefInfo.projectName).catch(() => {});
-        }
-        return NextResponse.json(
-          {
-            success: false,
-            error: "今月の修正依頼が上限（月2回）に達しました。スタンダードプランへのアップグレードをご検討ください。",
-            upgradeUrl: "https://ai-company.dev/pricing",
-          },
-          { status: 429 }
-        );
-      }
-    } catch {
-      // チェック失敗時は通す（サービス継続優先）
-    }
   }
 
   // --- Step 4: 受付確認メールを送信 ---
