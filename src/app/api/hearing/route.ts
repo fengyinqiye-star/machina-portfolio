@@ -1,7 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
+import { checkRateLimit } from "@/lib/rateLimit";
+import { triggerWebhook } from "@/lib/triggerWebhook";
 
 export async function POST(request: NextRequest) {
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const rateCheck = await checkRateLimit(`hearing:${ip}`);
+  if (!rateCheck.allowed) {
+    return NextResponse.json(
+      { success: false, error: "リクエストが多すぎます。しばらく待ってから再試行してください。" },
+      { status: 429, headers: { "Retry-After": String(rateCheck.retryAfter) } }
+    );
+  }
+
   let body: unknown;
   try {
     body = await request.json();
@@ -45,6 +56,9 @@ ${Object.entries(answers).map(([k, v]) => `## ${k}\n${v || "（未回答）"}`).
     console.error("Hearing save error:", err);
     return NextResponse.json({ success: false, error: "保存に失敗しました" }, { status: 500 });
   }
+
+  // Webhookサーバーに即時通知
+  triggerWebhook(orderId, "hearing.answered").catch(() => {});
 
   return NextResponse.json({ success: true });
 }

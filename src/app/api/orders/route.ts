@@ -4,6 +4,7 @@ import { getStorageAdapter } from "@/lib/storage/adapter";
 import { checkRateLimit } from "@/lib/rateLimit";
 import { formatDate, slugify } from "@/lib/utils";
 import { sendOrderConfirmation, sendOwnerNotification } from "@/lib/email";
+import { triggerWebhook } from "@/lib/triggerWebhook";
 
 export async function POST(request: NextRequest) {
   // レートリミット
@@ -103,8 +104,8 @@ ${data.maintenancePlan === "basic" ? "基本プラン（月額 ¥5,000）— ホ
     orderId,
   }).catch((err) => console.error("[api/orders] 運営通知メール送信失敗:", err));
 
-  // エージェントはcheck-new-orders.shが起動する（支払い確認後に開発開始）
-  // Phase1（見積もり・支払いリンク送付）はcronで自動実行される
+  // Webhookサーバーに即時通知（未設定時はcronがフォールバック）
+  triggerWebhook(orderId, "order.new").catch(() => {});
 
   return NextResponse.json({ success: true, orderId }, { status: 201 });
 }

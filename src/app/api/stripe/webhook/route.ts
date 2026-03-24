@@ -4,22 +4,6 @@ import { stripe } from "@/lib/stripe";
 
 export const dynamic = "force-dynamic";
 
-async function pauseVercelProject(projectId: string) {
-  const token = process.env.VERCEL_TOKEN;
-  if (!token || !projectId) return;
-
-  const res = await fetch(`https://api.vercel.com/v1/projects/${projectId}/pause`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${token}` },
-  });
-
-  if (res.ok) {
-    console.log(`[stripe/webhook] Vercelプロジェクト停止: ${projectId}`);
-  } else {
-    const body = await res.text();
-    console.error(`[stripe/webhook] Vercel停止失敗 (${res.status}): ${body}`);
-  }
-}
 
 export async function POST(request: NextRequest) {
   if (!stripe) {
@@ -63,6 +47,9 @@ export async function POST(request: NextRequest) {
           contentType: "text/markdown",
         });
         console.log(`[stripe/webhook] payment-received.md 保存完了: ${orderId}`);
+        // Webhookサーバーに即時通知
+        const { triggerWebhook } = await import("@/lib/triggerWebhook");
+        triggerWebhook(orderId, "payment.received").catch(() => {});
       } catch (err) {
         console.error("[stripe/webhook] Blob書き込み失敗:", err);
         // ローカル環境ではフォールバックとして直接トリガー
@@ -90,20 +77,56 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // サブスクリプション解約 → Vercelプロジェクト停止
+  // サブスクリプション解約 → 14日猶予期間を設定してBlob保存 + 通知メール
   if (event.type === "customer.subscription.deleted") {
     const subscription = event.data.object as {
-      metadata?: { orderId?: string; plan?: string; vercelProjectId?: string };
+      metadata?: {
+        orderId?: string;
+        plan?: string;
+        vercelProjectId?: string;
+        githubRepo?: string;
+        toEmail?: string;
+        contactName?: string;
+        projectName?: string;
+      };
     };
-    const orderId = subscription.metadata?.orderId;
-    const vercelProjectId = subscription.metadata?.vercelProjectId;
+    const meta = subscription.metadata ?? {};
+    const orderId = meta.orderId;
+    const vercelProjectId = meta.vercelProjectId;
+    const githubRepo = meta.githubRepo ?? "";
+    const toEmail = meta.toEmail ?? "";
+    const contactName = meta.contactName ?? "";
+    const projectName = meta.projectName ?? "";
 
-    console.log(`[stripe/webhook] 保守プラン解約: ${orderId} — Vercelプロジェクト停止`);
+    const cancelledAt = new Date().toISOString();
+    const expiresAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();
 
-    if (vercelProjectId) {
-      await pauseVercelProject(vercelProjectId);
-    } else {
-      console.warn(`[stripe/webhook] vercelProjectId未設定 — 停止スキップ (orderId: ${orderId})`);
+    console.log(`[stripe/webhook] 保守プラン解約: ${orderId} — 14日猶予期間設定`);
+
+    // Vercel Blob に解約情報を保存
+    if (orderId) {
+      try {
+        const { put } = await import("@vercel/blob");
+        const content = [
+          `# サブスクリプション解約`,
+          ``,
+          `解約日時: ${cancelledAt}`,
+          `猶予期間終了日: ${expiresAt}`,
+          `Vercel Project ID: ${vercelProjectId ?? ""}`,
+          `GitHub リポジトリ: ${githubRepo}`,
+          `依頼者メール: ${toEmail}`,
+          `依頼者名: ${contactName}`,
+          `プロジェクト名: ${projectName}`,
+          `ステータス: grace_period`,
+        ].join("\n");
+        await put(`orders/${orderId}/subscription-cancelled.md`, content, {
+          access: "private",
+          contentType: "text/markdown",
+        });
+        console.log(`[stripe/webhook] subscription-cancelled.md 保存完了: ${orderId}`);
+      } catch (err) {
+        console.error("[stripe/webhook] Blob書き込み失敗:", err);
+      }
     }
   }
 
