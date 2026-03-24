@@ -1,4 +1,7 @@
+import { PROJECTS } from "@/data/projects";
+
 export function HeroSection() {
+  const projectCount = PROJECTS.length;
   return (
     <section className="relative min-h-[92vh] flex flex-col justify-center px-6 overflow-hidden bg-[var(--bg)]">
       {/* Subtle grid background */}
@@ -47,7 +50,7 @@ export function HeroSection() {
 
         {/* Social proof */}
         <p className="text-sm text-[var(--muted)] mb-10">
-          <span style={{ color: "var(--accent)" }} className="font-bold">実績16件・テストカバレッジ平均89%</span>
+          <span style={{ color: "var(--accent)" }} className="font-bold">実績{projectCount}件・テストカバレッジ平均89%</span>
           　|　納品後30日間無償サポート
         </p>
 
