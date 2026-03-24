@@ -126,8 +126,15 @@ async function getOrdersFromBlob() {
 
   const { list } = await import("@vercel/blob");
 
-  // 全 Blob を列挙（最大1000件）
-  const { blobs } = await list({ prefix: "orders/", token });
+  // 全 Blob を列挙（ページネーション対応）
+  type BlobItem = Awaited<ReturnType<typeof list>>["blobs"][number];
+  const blobs: BlobItem[] = [];
+  let cursor: string | undefined;
+  do {
+    const result = await list({ prefix: "orders/", token, limit: 1000, ...(cursor ? { cursor } : {}) });
+    blobs.push(...result.blobs);
+    cursor = result.cursor;
+  } while (cursor);
 
   // 一意の案件IDを抽出
   const orderIds = [...new Set(

@@ -60,3 +60,9 @@ export async function checkRateLimit(
   }
   return checkInMemory(ip);
 }
+
+// orderId バリデーション（パストラバーサル防止）
+// 英数字・ハイフン・アンダースコア・ドットのみ許可、40文字以内
+export function isValidOrderId(orderId: string): boolean {
+  return /^[a-zA-Z0-9_\-\.]{1,80}$/.test(orderId) && !orderId.includes("..");
+}

@@ -8,6 +8,16 @@ const FROM_ADDRESS = "Machina <noreply@ai-company.dev>";
 const COMPANY_NAME = "Machina";
 const OWNER_EMAIL = process.env.OWNER_EMAIL ?? "fengyinqiye@gmail.com";
 
+// HTMLエスケープ（メール本文内のユーザー入力を安全化）
+function esc(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#x27;");
+}
+
 // RFC 2047 B-encoding: 非ASCII文字を含む件名をメールクライアント互換に変換
 function encodeSubject(subject: string): string {
   if (/^[\x20-\x7E]*$/.test(subject)) return subject;
@@ -86,6 +96,10 @@ export async function sendDeliveryNotification(params: {
   }
 
   const { to, contactName, projectName, orderId } = params;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ai-company.dev";
+  const feedbackUrl = `${siteUrl}/feedback/${orderId}`;
+  const cancelUrl = `${siteUrl}/cancel/${orderId}`;
+  const statusUrl = `${siteUrl}/status/${orderId}`;
 
   await resend.emails.send({
     from: FROM_ADDRESS,
@@ -95,17 +109,17 @@ export async function sendDeliveryNotification(params: {
 <!DOCTYPE html>
 <html lang="ja">
 <head><meta charset="UTF-8"></head>
-<body style="font-family: sans-serif; color: #111; background: #fafaf8; padding: 32px;">
+<body style="font-family: sans-serif; color: #111; background: #fafaf8; padding: 32px; max-width: 640px;">
   <h1 style="font-size: 20px; margin-bottom: 8px;">${COMPANY_NAME}</h1>
   <p style="color: #88857f; font-size: 13px; margin-bottom: 32px;">AI-Powered Development</p>
 
-  <p>${contactName} 様</p>
+  <p>${esc(contactName)} 様</p>
   <p>AIエージェントチームによる開発が完了しました。</p>
 
   <table style="border-collapse: collapse; margin: 24px 0; width: 100%;">
     <tr>
       <td style="padding: 8px 16px 8px 0; color: #88857f; font-size: 13px; white-space: nowrap;">案件名</td>
-      <td style="padding: 8px 0; font-weight: bold;">${projectName}</td>
+      <td style="padding: 8px 0; font-weight: bold;">${esc(projectName)}</td>
     </tr>
     <tr>
       <td style="padding: 8px 16px 8px 0; color: #88857f; font-size: 13px;">案件ID</td>
@@ -120,7 +134,21 @@ export async function sendDeliveryNotification(params: {
   <p>納品物のURL・セットアップ手順などは、別途メールにてご案内いたします。<br>
   ご不明な点がございましたら、このメールへの返信でお気軽にお問い合わせください。</p>
 
+  <div style="margin: 24px 0; display: flex; flex-direction: column; gap: 8px;">
+    <a href="${statusUrl}" style="display: inline-block; background: #a8e63a; color: #111; font-weight: bold; padding: 12px 24px; text-decoration: none; font-size: 14px; margin-bottom: 8px;">
+      進捗・修正依頼を確認する →
+    </a>
+    <a href="${feedbackUrl}" style="display: inline-block; color: #88857f; font-size: 12px; text-decoration: underline;">
+      修正を依頼する
+    </a>
+  </div>
+
   <hr style="border: none; border-top: 1px solid #e0ddd8; margin: 32px 0;">
+  <p style="color: #88857f; font-size: 11px; line-height: 1.8;">
+    保守プランにご加入中の場合、解約は
+    <a href="${cancelUrl}" style="color: #88857f;">${cancelUrl}</a>
+    から手続きいただけます（日割り返金あり）。
+  </p>
   <p style="color: #88857f; font-size: 12px;">${COMPANY_NAME} — Automated Development</p>
 </body>
 </html>
@@ -158,7 +186,7 @@ export async function sendRevisionConfirmation(params: {
 
   <div style="background: #f5f4f0; border-left: 3px solid #a8e63a; padding: 16px 20px; margin: 24px 0; border-radius: 0 6px 6px 0;">
     <p style="color: #88857f; font-size: 12px; margin: 0 0 8px;">ご依頼内容</p>
-    <p style="margin: 0; white-space: pre-wrap;">${feedback}</p>
+    <p style="margin: 0; white-space: pre-wrap;">${esc(feedback)}</p>
   </div>
 
   <table style="border-collapse: collapse; margin: 24px 0; width: 100%;">
@@ -215,3 +243,63 @@ export async function sendOwnerNotification(params: {
     `.trim(),
   });
 }
+
+export async function sendCancellationConfirmation(params: {
+  to: string;
+  contactName: string;
+  projectName: string;
+  orderId: string;
+  refundAmount: number;
+  cancelledAt: string;
+}): Promise<void> {
+  if (!resend) return;
+
+  const { to, contactName, projectName, orderId, refundAmount, cancelledAt } = params;
+  const refundText = refundAmount > 0
+    ? `¥${refundAmount.toLocaleString()} を元のお支払い方法へ返金処理します（通常3〜5営業日で反映）。`
+    : "今月分は残存期間が短いため返金額は0円となります。";
+
+  await resend.emails.send({
+    from: FROM_ADDRESS,
+    to,
+    subject: encodeSubject(`【解約完了】${esc(projectName)} の保守プランを解約しました`),
+    html: `
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta charset="UTF-8"></head>
+<body style="font-family: sans-serif; color: #111; background: #fafaf8; padding: 32px; max-width: 640px;">
+  <h1 style="font-size: 20px; margin-bottom: 8px;">${COMPANY_NAME}</h1>
+  <p style="color: #88857f; font-size: 13px; margin-bottom: 32px;">AI-Powered Development</p>
+
+  <p>${esc(contactName)} 様</p>
+  <p>保守プランの解約手続きが完了しました。</p>
+
+  <table style="border-collapse: collapse; margin: 24px 0; width: 100%;">
+    <tr>
+      <td style="padding: 8px 16px 8px 0; color: #88857f; font-size: 13px; white-space: nowrap;">案件名</td>
+      <td style="padding: 8px 0; font-weight: bold;">${esc(projectName)}</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px 16px 8px 0; color: #88857f; font-size: 13px;">解約日時</td>
+      <td style="padding: 8px 0; font-size: 13px;">${cancelledAt}</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px 16px 8px 0; color: #88857f; font-size: 13px;">返金額</td>
+      <td style="padding: 8px 0; font-weight: bold;">¥${refundAmount.toLocaleString()}</td>
+    </tr>
+  </table>
+
+  <p style="font-size: 14px;">${refundText}</p>
+  <p style="font-size: 13px; color: #88857f;">
+    GitHubのソースコードは引き続きご利用いただけます。<br>
+    ご不明な点は <a href="mailto:autocode.2603@gmail.com">autocode.2603@gmail.com</a> までご連絡ください。
+  </p>
+
+  <hr style="border: none; border-top: 1px solid #e0ddd8; margin: 32px 0;">
+  <p style="color: #88857f; font-size: 12px;">${COMPANY_NAME} — Automated Development</p>
+</body>
+</html>
+    `.trim(),
+  });
+}
+

@@ -1,7 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { put } from "@vercel/blob";
+import { put, list } from "@vercel/blob";
+import { checkRateLimit, isValidOrderId } from "@/lib/rateLimit";
 
 export async function POST(request: NextRequest) {
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const rateCheck = await checkRateLimit(`acceptance:${ip}`);
+  if (!rateCheck.allowed) {
+    return NextResponse.json(
+      { success: false, error: "リクエストが多すぎます。しばらく待ってから再試行してください。" },
+      { status: 429, headers: { "Retry-After": String(rateCheck.retryAfter) } }
+    );
+  }
+
   let body: unknown;
   try {
     body = await request.json();
@@ -17,6 +27,22 @@ export async function POST(request: NextRequest) {
 
   if (!orderId) {
     return NextResponse.json({ success: false, error: "Missing orderId" }, { status: 422 });
+  }
+  if (!isValidOrderId(orderId)) {
+    return NextResponse.json({ success: false, error: "Invalid orderId" }, { status: 422 });
+  }
+
+  // orderId の存在確認（なりすまし防止）
+  if (process.env.VERCEL_ENV) {
+    try {
+      const token = process.env.BLOB_READ_WRITE_TOKEN!;
+      const briefResult = await list({ prefix: `orders/${orderId}/brief.md`, token });
+      if (briefResult.blobs.length === 0) {
+        return NextResponse.json({ success: false, error: "Order not found" }, { status: 404 });
+      }
+    } catch {
+      // チェック失敗時は通す
+    }
   }
 
   const content = `# 検収確認: ${orderId}
@@ -34,6 +60,7 @@ export async function POST(request: NextRequest) {
       await put(`orders/${orderId}/acceptance-001.md`, content, {
         access: "private",
         contentType: "text/markdown",
+        allowOverwrite: true,
       });
     } else {
       const fs = await import("fs");

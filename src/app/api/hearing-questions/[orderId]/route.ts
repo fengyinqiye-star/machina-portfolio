@@ -26,10 +26,20 @@ function parseQuestions(md: string): { key: string; label: string; placeholder: 
 }
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: { orderId: string } }
 ) {
   const { orderId } = params;
+
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const { checkRateLimit, isValidOrderId } = await import("@/lib/rateLimit");
+  if (!isValidOrderId(orderId)) {
+    return NextResponse.json({ questions: [], round: 0, ready: false }, { status: 422 });
+  }
+  const rateCheck = await checkRateLimit(`hearing-q:${ip}`);
+  if (!rateCheck.allowed) {
+    return NextResponse.json({ questions: [], round: 0, ready: false }, { status: 429 });
+  }
 
   // 最新のhearing-questions-{n}.mdを取得
   let content = "";

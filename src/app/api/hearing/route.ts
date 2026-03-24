@@ -44,6 +44,7 @@ ${Object.entries(answers).map(([k, v]) => `## ${k}\n${v || "（未回答）"}`).
       await put(`orders/${orderId}/${filename}`, content, {
         access: "private",
         contentType: "text/markdown",
+        allowOverwrite: true,
       });
     } else {
       const fs = await import("fs");

@@ -48,6 +48,10 @@ export default function HomePage() {
       <footer className="py-10 text-center text-xs text-[var(--muted)] border-t border-[var(--border)]">
         <p>© 2026 Machina. All rights reserved.</p>
         <p className="mt-1">このサイトはAIエージェントによって自動開発されました。</p>
+        <p className="mt-3 flex justify-center gap-4">
+          <a href="/legal" className="hover:text-[var(--text)] transition-colors">特定商取引法に基づく表記</a>
+          <a href="/terms" className="hover:text-[var(--text)] transition-colors">利用規約・プライバシーポリシー</a>
+        </p>
       </footer>
     </>
   );
