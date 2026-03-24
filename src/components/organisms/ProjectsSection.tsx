@@ -11,57 +11,40 @@ export function ProjectsSection() {
           <h2 className="text-4xl md:text-5xl font-bold text-[var(--text)]">実績</h2>
         </div>
 
-        <div className="border border-[var(--border)]">
-          {PROJECTS.map((project, index) => {
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[var(--border)]">
+          {PROJECTS.map((project) => {
             const inner = (
               <>
-                <div className="flex flex-wrap items-center gap-3 mb-6">
-                  <span className="text-xs font-mono text-[var(--muted)]">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  {project.highlight && (
-                    <span
-                      className="text-xs px-2 py-0.5 border font-mono"
-                      style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
-                    >
-                      {project.highlight}
-                    </span>
-                  )}
-                </div>
-
-                <h3 className="text-2xl md:text-3xl font-bold text-[var(--text)] mb-4">
+                {project.highlight && (
+                  <p className="text-[10px] tracking-widest uppercase mb-3" style={{ color: "var(--accent)" }}>
+                    {project.highlight.replace(/実績第\d+号 — /, "")}
+                  </p>
+                )}
+                <h3 className="text-base font-bold text-[var(--text)] mb-2 leading-snug">
                   {project.title}
                 </h3>
-
-                <p className="text-[var(--muted)] mb-8 max-w-2xl leading-relaxed">
+                <p className="text-xs text-[var(--muted)] leading-relaxed mb-4 line-clamp-2">
                   {project.description}
                 </p>
-
-                <div className="flex flex-wrap items-center justify-between gap-4">
-                  <div className="flex flex-wrap gap-2">
-                    {project.techStack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="text-xs px-3 py-1 border border-[var(--border)] text-[var(--muted)] font-mono"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  {project.url && (
+                <div className="flex flex-wrap gap-1 mt-auto">
+                  {project.techStack.slice(0, 3).map((tech) => (
                     <span
-                      className="text-sm font-mono flex-shrink-0"
-                      style={{ color: "var(--accent)" }}
+                      key={tech}
+                      className="text-[10px] px-2 py-0.5 border border-[var(--border)] text-[var(--muted)] font-mono"
                     >
-                      サイトを見る →
+                      {tech}
                     </span>
-                  )}
+                  ))}
                 </div>
+                {project.url && (
+                  <p className="text-xs font-mono mt-3" style={{ color: "var(--accent)" }}>
+                    サイトを見る →
+                  </p>
+                )}
               </>
             );
 
-            const cls =
-              "p-8 md:p-14 border-b border-[var(--border)] last:border-b-0 block transition-colors";
+            const cls = "p-6 bg-[var(--bg)] flex flex-col transition-colors min-h-[180px]";
 
             return project.url ? (
               <a
