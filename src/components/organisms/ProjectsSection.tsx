@@ -11,6 +11,10 @@ export function ProjectsSection() {
           <h2 className="text-4xl md:text-5xl font-bold text-[var(--text)]">実績</h2>
         </div>
 
+        <p className="text-xs text-[var(--muted)] mb-6 border border-[var(--border)] px-4 py-3">
+          ※ 掲載している実績はすべてデモ・サンプル案件です。実際の顧客情報は含まれません。
+        </p>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[var(--border)]">
           {PROJECTS.map((project) => {
             const inner = (
