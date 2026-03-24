@@ -28,11 +28,8 @@ export const orderSchema = z.object({
     .enum(["none", "basic", "standard", "premium"])
     .optional()
     .default("none"),
-  honeypot: z
-    .string()
-    .max(0, "Bot detected")
-    .optional()
-    .default(""),
+  // honeypotはルートハンドラで長さチェックするのでスキーマでは制約しない
+  honeypot: z.string().optional().default(""),
 });
 
 export type OrderInput = z.infer<typeof orderSchema>;

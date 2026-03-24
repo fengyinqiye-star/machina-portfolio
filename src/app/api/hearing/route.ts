@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
-import { checkRateLimit } from "@/lib/rateLimit";
+import { checkRateLimit, isValidOrderId } from "@/lib/rateLimit";
 import { triggerWebhook } from "@/lib/triggerWebhook";
 
 export async function POST(request: NextRequest) {
@@ -28,6 +28,9 @@ export async function POST(request: NextRequest) {
 
   if (!orderId || !answers) {
     return NextResponse.json({ success: false, error: "必須項目が不足しています。" }, { status: 422 });
+  }
+  if (!isValidOrderId(orderId)) {
+    return NextResponse.json({ success: false, error: "無効な案件IDです。" }, { status: 422 });
   }
 
   const rev = round ?? 1;

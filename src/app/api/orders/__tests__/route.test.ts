@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * POST /api/orders のテスト
  * Note: Next.js API Routeのテストはintegrationに近いため、
  *       ストレージアダプターはモックする。

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 
 type Phase = {
@@ -21,7 +21,7 @@ type OrderStatus = {
   updatedAt: string;
 };
 
-export default function OrderStatusPage() {
+function OrderStatusContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const orderId = params.orderId as string;
@@ -144,5 +144,13 @@ export default function OrderStatusPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function OrderStatusPage() {
+  return (
+    <Suspense>
+      <OrderStatusContent />
+    </Suspense>
   );
 }

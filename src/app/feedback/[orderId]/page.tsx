@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 
-export default function FeedbackPage() {
+function FeedbackContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const orderId = params.orderId as string;
@@ -153,6 +153,14 @@ export default function FeedbackPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function FeedbackPage() {
+  return (
+    <Suspense>
+      <FeedbackContent />
+    </Suspense>
   );
 }
 

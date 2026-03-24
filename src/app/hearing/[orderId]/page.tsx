@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 
 type Question = { key: string; label: string; placeholder: string };
 
-export default function HearingPage() {
+function HearingContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const orderId = params.orderId as string;
@@ -116,6 +116,14 @@ export default function HearingPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function HearingPage() {
+  return (
+    <Suspense>
+      <HearingContent />
+    </Suspense>
   );
 }
 

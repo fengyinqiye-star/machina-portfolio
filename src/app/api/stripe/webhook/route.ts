@@ -125,6 +125,7 @@ async function processEvent(event: { type: string; data: { object: unknown } }) 
         await put(`orders/${orderId}/subscription-cancelled.md`, content, {
           access: "private",
           contentType: "text/markdown",
+          allowOverwrite: true,
         });
         console.log(`[stripe/webhook] subscription-cancelled.md 保存完了: ${orderId}`);
       } catch (err) {

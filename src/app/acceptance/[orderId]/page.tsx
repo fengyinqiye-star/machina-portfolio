@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 
-export default function AcceptancePage() {
+function AcceptanceContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const orderId = params.orderId as string;
@@ -140,5 +140,13 @@ export default function AcceptancePage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function AcceptancePage() {
+  return (
+    <Suspense>
+      <AcceptanceContent />
+    </Suspense>
   );
 }

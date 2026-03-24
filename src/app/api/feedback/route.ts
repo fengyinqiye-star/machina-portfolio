@@ -15,6 +15,7 @@ function parsePlan(content: string): "none" | "basic" | "standard" | "premium" {
 
 // 当月の修正回数をカウント（Blob）
 async function countThisMonthRevisions(orderId: string): Promise<number> {
+  if (!process.env.VERCEL_ENV) return 0;
   const token = process.env.BLOB_READ_WRITE_TOKEN!;
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
