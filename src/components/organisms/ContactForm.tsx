@@ -116,11 +116,31 @@ export function ContactForm() {
       <FormField label="保守プラン" htmlFor="maintenancePlan" error={errors.maintenancePlan?.message}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1">
           {[
-            { value: "none",     label: "なし",         sub: "一括払い・コード移管" },
-            { value: "basic",    label: "基本プラン",    sub: "月額 ¥2,980 / ホスティング込み" },
-            { value: "standard", label: "スタンダード",  sub: "月額 ¥4,980 / 月1回改善" },
-            { value: "premium",  label: "プレミアム",    sub: "月額 ¥19,800 / 優先対応" },
-          ].map(({ value, label, sub }) => {
+            {
+              value: "none",
+              label: "なし",
+              price: "一括払い・コード移管",
+              features: ["GitHubリポジトリ移管", "Vercel設定引き渡し", "30日間瑕疵対応"],
+            },
+            {
+              value: "basic",
+              label: "基本プラン",
+              price: "¥2,980 / 月",
+              features: ["ホスティング継続", "SSL・セキュリティ維持", "軽微な修正 月2回まで"],
+            },
+            {
+              value: "standard",
+              label: "スタンダード",
+              price: "¥4,980 / 月",
+              features: ["基本プランすべて", "修正依頼 無制限", "月次レポート"],
+            },
+            {
+              value: "premium",
+              label: "プレミアム",
+              price: "¥19,800 / 月",
+              features: ["スタンダードすべて", "優先対応（最短当日）", "機能追加・改善対応"],
+            },
+          ].map(({ value, label, price, features }) => {
             const checked = selectedPlan === value;
             return (
               <label
@@ -138,9 +158,18 @@ export function ContactForm() {
                   className="mt-1 shrink-0 accent-[var(--accent)]"
                   {...register("maintenancePlan")}
                 />
-                <span>
-                  <span className="block text-sm font-medium text-[var(--text)]">{label}</span>
-                  <span className="block text-xs text-[var(--muted)] mt-0.5">{sub}</span>
+                <span className="w-full">
+                  <span className="flex items-baseline justify-between gap-2">
+                    <span className="block text-sm font-medium text-[var(--text)]">{label}</span>
+                    <span className="text-xs text-[var(--muted)] shrink-0">{price}</span>
+                  </span>
+                  <ul className="mt-1.5 space-y-0.5">
+                    {features.map((f) => (
+                      <li key={f} className="text-xs text-[var(--muted)] flex items-center gap-1">
+                        <span style={{ color: "var(--accent)" }}>✓</span> {f}
+                      </li>
+                    ))}
+                  </ul>
                 </span>
               </label>
             );
