@@ -148,6 +148,17 @@ export const PROJECTS: Project[] = [
     url: "https://ai-co-2026-03-23t00-00-04-beauty-qubf9m0wj.vercel.app",
   },
   {
+    id: "2026-03-24T01-41-56-e2eexgpvvlp",
+    title: "テスト株式会社 コーポレートLP",
+    description:
+      "会社概要とお問い合わせフォームを備えたシンプルなコーポレートランディングページ。Next.js App Router + TypeScript + Tailwind CSS で実装し、フォームバリデーション・レート制限・SEOメタデータを完備。テストカバレッジ100%を達成。",
+    techStack: ["Next.js 15", "TypeScript", "Tailwind CSS 4", "Vercel"],
+    duration: "自動開発",
+    status: "completed",
+    highlight: "実績第15号 — コーポレートLP（テストカバレッジ100%）",
+    url: "https://ai-company-2026-03-24t01-41-56-e2eexgpvvlp-3z5a9lsq3.vercel.app",
+  },
+  {
     id: "2026-03-23T00-00-08-construction",
     title: "小林建設株式会社 コーポレートサイト",
     description:
