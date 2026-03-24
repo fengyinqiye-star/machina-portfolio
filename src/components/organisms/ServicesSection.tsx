@@ -17,11 +17,11 @@ const FEATURED_WORKS = [
     url: "https://ai-company-2026-03-23t00-00-03-kvbpp6sgn.vercel.app",
   },
   {
-    label: "不動産会社",
-    title: "タカハシ不動産",
-    desc: "物件一覧・フィルター検索・スタッフ紹介・問い合わせフォーム完備",
-    tags: ["コーポレートサイト", "検索機能"],
-    url: "https://ai-company-2026-03-23t00-00-02-real-estate-7wzm7ktif.vercel.app",
+    label: "美容サロン",
+    title: "LUMIÈRE BEAUTY SALON",
+    desc: "オンライン予約・ギャラリー・スタイリスト紹介を備えたラグジュアリーサイト",
+    tags: ["コーポレートサイト", "予約フォーム"],
+    url: "https://ai-co-2026-03-23t00-00-04-beauty-qubf9m0wj.vercel.app",
   },
   {
     label: "フィットネスジム",
