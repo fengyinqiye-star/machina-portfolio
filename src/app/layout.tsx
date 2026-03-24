@@ -122,6 +122,7 @@ export default function RootLayout({
   return (
     <html lang="ja" suppressHydrationWarning className={spaceGrotesk.variable}>
       <head>
+        <meta name="google-site-verification" content="CZQQhkOAPCUzWY3r0mj2Bo-920WHldfgXr0yxo0GE54" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
