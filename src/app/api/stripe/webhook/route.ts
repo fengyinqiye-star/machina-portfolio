@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import path from "path";
+import { waitUntil } from "@vercel/functions";
 import { stripe } from "@/lib/stripe";
 
 export const dynamic = "force-dynamic";
-
 
 export async function POST(request: NextRequest) {
   if (!stripe) {
@@ -26,6 +25,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
+  // Stripeへ即座に200を返し、重い処理はバックグラウンドで実行
+  waitUntil(processEvent(event));
+
+  return NextResponse.json({ received: true });
+}
+
+async function processEvent(event: { type: string; data: { object: unknown } }) {
   // 支払い完了（初回受注の一括払い）
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as {
@@ -36,9 +42,6 @@ export async function POST(request: NextRequest) {
 
     if (session.mode === "payment" && orderId) {
       console.log(`[stripe/webhook] 支払い完了: ${orderId} — payment-received.md をBlobに保存`);
-
-      // Vercel Blob に payment-received.md を書き込む
-      // → check-new-orders.sh がローカルに同期して開発をトリガーする
       try {
         const { put } = await import("@vercel/blob");
         const content = `# 支払い完了\n\n受付日時: ${new Date().toISOString()}\n案件ID: ${orderId}\n`;
@@ -47,26 +50,10 @@ export async function POST(request: NextRequest) {
           contentType: "text/markdown",
         });
         console.log(`[stripe/webhook] payment-received.md 保存完了: ${orderId}`);
-        // Webhookサーバーに即時通知
         const { triggerWebhook } = await import("@/lib/triggerWebhook");
         triggerWebhook(orderId, "payment.received").catch(() => {});
       } catch (err) {
         console.error("[stripe/webhook] Blob書き込み失敗:", err);
-        // ローカル環境ではフォールバックとして直接トリガー
-        if (!process.env.VERCEL_ENV) {
-          try {
-            const { spawn } = await import("child_process");
-            const triggerScript = path.resolve(process.cwd(), "..", "..", "..", "scripts", "trigger-order.sh");
-            const agent = spawn("bash", [triggerScript, orderId], {
-              detached: true,
-              stdio: "ignore",
-              cwd: path.resolve(process.cwd(), "..", "..", ".."),
-            });
-            agent.unref();
-          } catch (e) {
-            console.error("[stripe/webhook] ローカルトリガー失敗:", e);
-          }
-        }
       }
     }
 
@@ -77,7 +64,24 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // サブスクリプション解約 → 14日猶予期間を設定してBlob保存 + 通知メール
+  // 支払いセッション期限切れ → Webhookサーバーに通知（PC側で再発行スクリプトを起動）
+  if (event.type === "checkout.session.expired") {
+    const session = event.data.object as {
+      metadata?: { orderId?: string };
+    };
+    const orderId = session.metadata?.orderId;
+    if (orderId) {
+      console.log(`[stripe/webhook] セッション期限切れ: ${orderId} — 再発行通知`);
+      try {
+        const { triggerWebhook } = await import("@/lib/triggerWebhook");
+        triggerWebhook(orderId, "payment.link_expired").catch(() => {});
+      } catch (err) {
+        console.error("[stripe/webhook] 期限切れ通知失敗:", err);
+      }
+    }
+  }
+
+  // サブスクリプション解約 → 14日猶予期間を設定
   if (event.type === "customer.subscription.deleted") {
     const subscription = event.data.object as {
       metadata?: {
@@ -103,7 +107,6 @@ export async function POST(request: NextRequest) {
 
     console.log(`[stripe/webhook] 保守プラン解約: ${orderId} — 14日猶予期間設定`);
 
-    // Vercel Blob に解約情報を保存
     if (orderId) {
       try {
         const { put } = await import("@vercel/blob");
@@ -129,6 +132,4 @@ export async function POST(request: NextRequest) {
       }
     }
   }
-
-  return NextResponse.json({ received: true });
 }
