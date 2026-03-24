@@ -128,6 +128,57 @@ export async function sendDeliveryNotification(params: {
   });
 }
 
+export async function sendRevisionConfirmation(params: {
+  to: string;
+  contactName: string;
+  projectName: string;
+  feedback: string;
+  revisionNo: number;
+  orderId: string;
+}): Promise<void> {
+  if (!resend) return;
+
+  const { to, contactName, projectName, feedback, revisionNo, orderId } = params;
+  const feedbackUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://ai-company.dev"}/feedback/${orderId}`;
+
+  await resend.emails.send({
+    from: FROM_ADDRESS,
+    to,
+    subject: encodeSubject(`【修正依頼受付】${projectName}`),
+    html: `
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta charset="UTF-8"></head>
+<body style="font-family: sans-serif; color: #111; background: #fafaf8; padding: 32px; max-width: 600px; margin: 0 auto;">
+  <h2 style="color: #111; font-size: 20px; margin-bottom: 4px;">Machina</h2>
+  <hr style="border: none; border-top: 1px solid #e0ddd8; margin: 16px 0 24px;">
+
+  <p>${contactName} 様</p>
+  <p>修正依頼 #${revisionNo} を受け付けました。<br>内容を確認次第、対応を開始いたします。</p>
+
+  <div style="background: #f5f4f0; border-left: 3px solid #a8e63a; padding: 16px 20px; margin: 24px 0; border-radius: 0 6px 6px 0;">
+    <p style="color: #88857f; font-size: 12px; margin: 0 0 8px;">ご依頼内容</p>
+    <p style="margin: 0; white-space: pre-wrap;">${feedback}</p>
+  </div>
+
+  <table style="border-collapse: collapse; margin: 24px 0; width: 100%;">
+    <tr><td style="padding: 6px 16px 6px 0; color: #88857f; font-size: 13px;">案件名</td><td>${projectName}</td></tr>
+    <tr><td style="padding: 6px 16px 6px 0; color: #88857f; font-size: 13px;">修正番号</td><td>#${revisionNo}</td></tr>
+  </table>
+
+  <p style="margin: 24px 0;">追加の修正依頼はこちらから：</p>
+  <p style="margin: 24px 0;">
+    <a href="${feedbackUrl}" style="display: inline-block; padding: 12px 24px; background: #a8e63a; color: #111; text-decoration: none; font-weight: bold; border-radius: 6px;">修正依頼フォームへ</a>
+  </p>
+
+  <hr style="border: none; border-top: 1px solid #e0ddd8; margin: 32px 0;">
+  <p style="color: #88857f; font-size: 12px;">${COMPANY_NAME} — noreply@ai-company.dev</p>
+</body>
+</html>
+    `.trim(),
+  });
+}
+
 export async function sendOwnerNotification(params: {
   contactName: string;
   contactEmail: string;

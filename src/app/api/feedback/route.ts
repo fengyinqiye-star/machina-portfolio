@@ -141,6 +141,37 @@ ${feedback}
     return NextResponse.json({ success: false, error: "保存に失敗しました" }, { status: 500 });
   }
 
+  // 修正依頼受付メールを送信
+  try {
+    const { list: blobList } = await import("@vercel/blob");
+    const { sendRevisionConfirmation } = await import("@/lib/email");
+    const token = process.env.BLOB_READ_WRITE_TOKEN!;
+    const briefResult = await blobList({ prefix: `orders/${orderId}/brief.md`, token });
+    if (briefResult.blobs.length > 0) {
+      const briefText = await fetch(briefResult.blobs[0].downloadUrl)
+        .then((r) => r.arrayBuffer())
+        .then((buf) => Buffer.from(buf).toString("utf-8"));
+      const emailMatch = briefText.match(/- メールアドレス: ([^\n]+)/);
+      const nameMatch = briefText.match(/- お名前: ([^\n]+)/);
+      const titleMatch = briefText.match(/^# 案件依頼: (.+)/m);
+      const toEmail = emailMatch?.[1]?.trim() ?? "";
+      const contactName = nameMatch?.[1]?.trim() ?? "お客様";
+      const projectName = titleMatch?.[1]?.trim() ?? orderId;
+      if (toEmail) {
+        await sendRevisionConfirmation({
+          to: toEmail,
+          contactName,
+          projectName,
+          feedback,
+          revisionNo: rev,
+          orderId,
+        });
+      }
+    }
+  } catch {
+    // メール失敗は無視
+  }
+
   // Webhookサーバーに修正依頼トリガーを送信
   try {
     const { triggerWebhook } = await import("@/lib/triggerWebhook");
