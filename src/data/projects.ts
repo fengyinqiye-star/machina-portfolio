@@ -159,6 +159,17 @@ export const PROJECTS: Project[] = [
     url: "https://ai-company-2026-03-24t01-41-56-e2eexgpvvlp-3z5a9lsq3.vercel.app",
   },
   {
+    id: "2026-03-24T15-01-54-reservationtest",
+    title: "さくら鍼灸整骨院 公式サイト",
+    description:
+      "開業3年目の鍼灸整骨院向け公式Webサイト。患者が24時間Web予約できる4ステップ予約システムと、スタッフ向け管理画面（予約一覧・メニュー管理・営業日設定）を実装。Turso+Drizzle ORMによるクラウドDB、NextAuth.js認証、Resend連携のメール通知を完備。",
+    techStack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Turso", "Drizzle ORM", "NextAuth.js", "Resend", "Zod"],
+    duration: "自動開発",
+    status: "completed",
+    highlight: "実績第16号 — 鍼灸整骨院公式サイト（Web予約システム・管理画面付き）",
+    url: "https://machina-sakura-clinic-reservationtest-mxlt5txuc.vercel.app",
+  },
+  {
     id: "2026-03-23T00-00-08-construction",
     title: "小林建設株式会社 コーポレートサイト",
     description:
