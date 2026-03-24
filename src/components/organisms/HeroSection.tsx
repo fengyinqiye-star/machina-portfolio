@@ -47,7 +47,7 @@ export function HeroSection() {
 
         {/* Social proof */}
         <p className="text-sm text-[var(--muted)] mb-10">
-          <span style={{ color: "var(--accent)" }} className="font-bold">実績10件・テストカバレッジ平均89%</span>
+          <span style={{ color: "var(--accent)" }} className="font-bold">実績16件・テストカバレッジ平均89%</span>
           　|　納品後30日間無償サポート
         </p>
 
