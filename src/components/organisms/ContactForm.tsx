@@ -65,6 +65,10 @@ export function ContactForm() {
         </div>
       )}
 
+      <p className="text-xs text-[var(--muted)] -mt-2 mb-2 p-3 border border-[var(--border)]">
+        💡 プランは選ばなくて大丈夫です。やりたいことを書いて送信するだけで、AIが内容を見て最適なプランと費用をご提案します。
+      </p>
+
       <FormField label="案件名" htmlFor="projectName" error={errors.projectName?.message} required>
         <Input
           id="projectName"
@@ -113,8 +117,8 @@ export function ContactForm() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1">
           {[
             { value: "none",     label: "なし",         sub: "一括払い・コード移管" },
-            { value: "basic",    label: "基本プラン",    sub: "月額 ¥5,000 / ホスティング込み" },
-            { value: "standard", label: "スタンダード",  sub: "月額 ¥10,000 / 月1回改善" },
+            { value: "basic",    label: "基本プラン",    sub: "月額 ¥2,980 / ホスティング込み" },
+            { value: "standard", label: "スタンダード",  sub: "月額 ¥4,980 / 月1回改善" },
             { value: "premium",  label: "プレミアム",    sub: "月額 ¥19,800 / 優先対応" },
           ].map(({ value, label, sub }) => {
             const checked = selectedPlan === value;

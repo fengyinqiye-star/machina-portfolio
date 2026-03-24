@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ success: false, error: "Invalid JSON" }, { status: 400 });
+    return NextResponse.json({ success: false, error: "リクエストの形式が正しくありません。" }, { status: 400 });
   }
 
   const { orderId, answers, round } = body as {
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
   };
 
   if (!orderId || !answers) {
-    return NextResponse.json({ success: false, error: "Missing fields" }, { status: 422 });
+    return NextResponse.json({ success: false, error: "必須項目が不足しています。" }, { status: 422 });
   }
 
   const rev = round ?? 1;

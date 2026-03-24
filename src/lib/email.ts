@@ -27,6 +27,7 @@ export async function sendOrderConfirmation(params: {
   }
 
   const { to, contactName, projectName, orderId } = params;
+  const statusUrl = `https://ai-company.dev/status/${orderId}`;
 
   await resend.emails.send({
     from: FROM_ADDRESS,
@@ -55,7 +56,15 @@ export async function sendOrderConfirmation(params: {
   </table>
 
   <p>AIエージェントチームが全工程（要件定義→設計→実装→テスト→レビュー→納品）を自動実行します。<br>
+  次のステップとして、詳細のヒアリングメールをお送りする場合があります。<br>
   完了次第、納品完了の通知をお送りします。</p>
+
+  <p style="margin: 24px 0;">
+    <a href="${statusUrl}" style="display: inline-block; background: #a8e63a; color: #111; font-weight: bold; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-size: 14px;">
+      進捗状況を確認する →
+    </a>
+  </p>
+  <p style="color: #88857f; font-size: 12px;">上のボタンが開かない場合: ${statusUrl}</p>
 
   <hr style="border: none; border-top: 1px solid #e0ddd8; margin: 32px 0;">
   <p style="color: #88857f; font-size: 12px;">${COMPANY_NAME} — Automated Development</p>
@@ -108,8 +117,8 @@ export async function sendDeliveryNotification(params: {
     </tr>
   </table>
 
-  <p>納品物は <code>deliverables/${orderId}/</code> に格納されています。<br>
-  README.md に従ってセットアップすることでご利用いただけます。</p>
+  <p>納品物のURL・セットアップ手順などは、別途メールにてご案内いたします。<br>
+  ご不明な点がございましたら、このメールへの返信でお気軽にお問い合わせください。</p>
 
   <hr style="border: none; border-top: 1px solid #e0ddd8; margin: 32px 0;">
   <p style="color: #88857f; font-size: 12px;">${COMPANY_NAME} — Automated Development</p>

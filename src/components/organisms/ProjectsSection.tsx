@@ -4,7 +4,6 @@ export function ProjectsSection() {
   return (
     <section id="projects" className="py-32 px-6 bg-[var(--bg)]">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="mb-20">
           <p className="text-xs tracking-widest uppercase mb-3" style={{ color: "var(--accent)" }}>
             Works
@@ -14,12 +13,11 @@ export function ProjectsSection() {
 
         <div className="border border-[var(--border)]">
           {PROJECTS.map((project, index) => {
-            const cardContent = (
+            const inner = (
               <>
-                {/* Meta row */}
-                <div className="flex flex-wrap items-center gap-4 mb-8">
+                <div className="flex flex-wrap items-center gap-3 mb-6">
                   <span className="text-xs font-mono text-[var(--muted)]">
-                    {String(index + 1).padStart(3, "0")}
+                    {String(index + 1).padStart(2, "0")}
                   </span>
                   {project.highlight && (
                     <span
@@ -29,43 +27,41 @@ export function ProjectsSection() {
                       {project.highlight}
                     </span>
                   )}
-                  <span
-                    className="text-xs px-2 py-0.5 border font-mono ml-auto"
-                    style={
-                      project.status === "completed"
-                        ? { borderColor: "var(--accent)", color: "var(--accent)" }
-                        : {}
-                    }
-                  >
-                    {project.status === "completed" ? "納品完了" : "進行中"}
-                  </span>
                 </div>
 
-                <h3 className="text-2xl md:text-4xl font-bold text-[var(--text)] mb-6">
+                <h3 className="text-2xl md:text-3xl font-bold text-[var(--text)] mb-4">
                   {project.title}
                 </h3>
 
-                <p className="text-[var(--muted)] mb-10 max-w-2xl leading-relaxed">
+                <p className="text-[var(--muted)] mb-8 max-w-2xl leading-relaxed">
                   {project.description}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-2">
-                  {project.techStack.map((tech) => (
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div className="flex flex-wrap gap-2">
+                    {project.techStack.map((tech) => (
+                      <span
+                        key={tech}
+                        className="text-xs px-3 py-1 border border-[var(--border)] text-[var(--muted)] font-mono"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  {project.url && (
                     <span
-                      key={tech}
-                      className="text-xs px-3 py-1 border border-[var(--border)] text-[var(--muted)] font-mono"
+                      className="text-sm font-mono flex-shrink-0"
+                      style={{ color: "var(--accent)" }}
                     >
-                      {tech}
+                      サイトを見る →
                     </span>
-                  ))}
-                  <span className="text-xs text-[var(--muted)] ml-auto font-mono">
-                    開発時間: {project.duration}
-                  </span>
+                  )}
                 </div>
               </>
             );
 
-            const className = "p-8 md:p-14 transition-colors border-b border-[var(--border)] last:border-b-0 block";
+            const cls =
+              "p-8 md:p-14 border-b border-[var(--border)] last:border-b-0 block transition-colors";
 
             return project.url ? (
               <a
@@ -73,13 +69,13 @@ export function ProjectsSection() {
                 href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={className + " hover:bg-[var(--bg-2)] cursor-pointer"}
+                className={cls + " hover:bg-[var(--bg-2)] cursor-pointer"}
               >
-                {cardContent}
+                {inner}
               </a>
             ) : (
-              <div key={project.id} className={className + " hover:bg-[var(--bg-2)]"}>
-                {cardContent}
+              <div key={project.id} className={cls + " hover:bg-[var(--bg-2)]"}>
+                {inner}
               </div>
             );
           })}

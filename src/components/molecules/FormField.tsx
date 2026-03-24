@@ -5,6 +5,7 @@ interface FormFieldProps {
   label: string;
   htmlFor: string;
   error?: string;
+  hint?: string;
   required?: boolean;
   children: ReactNode;
   className?: string;
@@ -14,6 +15,7 @@ export function FormField({
   label,
   htmlFor,
   error,
+  hint,
   required,
   children,
   className,
@@ -28,6 +30,9 @@ export function FormField({
         {required && <span className="ml-1" style={{ color: "var(--accent)" }}>*</span>}
       </label>
       {children}
+      {hint && !error && (
+        <p className="text-xs text-[var(--muted)]">{hint}</p>
+      )}
       {error && (
         <p className="text-xs text-red-500" role="alert">
           {error}

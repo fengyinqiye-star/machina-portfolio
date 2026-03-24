@@ -18,6 +18,16 @@ export const orderSchema = z.object({
     .string()
     .min(1, "お名前を入力してください")
     .max(50, "お名前は50文字以内で入力してください"),
+  customDomain: z
+    .string()
+    .max(253, "ドメイン名は253文字以内で入力してください")
+    .regex(/^$|^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/, "有効なドメイン名を入力してください（例: myshop.com）")
+    .optional()
+    .default(""),
+  maintenancePlan: z
+    .enum(["none", "basic", "standard", "premium"])
+    .optional()
+    .default("none"),
   honeypot: z
     .string()
     .max(0, "Bot detected")

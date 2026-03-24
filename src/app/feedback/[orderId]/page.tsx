@@ -15,6 +15,7 @@ export default function FeedbackPage() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [upgradeUrl, setUpgradeUrl] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,8 +31,11 @@ export default function FeedbackPage() {
       const json = await res.json();
       if (json.success) {
         setSubmitted(true);
+      } else if (res.status === 429 && json.upgradeUrl) {
+        setError(`${json.error} → `);
+        setUpgradeUrl(json.upgradeUrl);
       } else {
-        setError("送信に失敗しました。再度お試しください。");
+        setError(json.error ?? "送信に失敗しました。再度お試しください。");
       }
     } catch {
       setError("通信エラーが発生しました。");
@@ -84,7 +88,14 @@ export default function FeedbackPage() {
               required
             />
           </div>
-          {error && <p style={{ color: "#f56042", fontSize: 13, marginBottom: 16 }}>{error}</p>}
+          {error && (
+            <p style={{ color: "#f56042", fontSize: 13, marginBottom: 16 }}>
+              {error}
+              {upgradeUrl && (
+                <a href={upgradeUrl} style={{ color: "#a8e63a" }}>プランを確認する</a>
+              )}
+            </p>
+          )}
           <button type="submit" disabled={loading || !feedback.trim()} style={{
             ...styles.button,
             opacity: !feedback.trim() ? 0.5 : 1,

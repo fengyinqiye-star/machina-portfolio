@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<!--
+  OGP画像テンプレート (1200x630px)
+
+  このHTMLをブラウザで開き、スクリーンショット（1200x630）を撮影して
+  og-image.png として public/ に配置してください。
+
+  または https://og-playground.vercel.app/ などのツールを使って生成できます。
+-->
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1200px;
+      height: 630px;
+      background: #0a0a0a;
+      font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%);
+      top: -200px;
+      right: -100px;
+    }
+    .content { position: relative; z-index: 1; }
+    .badge {
+      display: inline-block;
+      background: rgba(16,185,129,0.1);
+      border: 1px solid rgba(16,185,129,0.3);
+      color: #10b981;
+      font-size: 14px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+      letter-spacing: 0.05em;
+    }
+    h1 {
+      font-size: 64px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+    h1 span { color: #10b981; }
+    p {
+      font-size: 22px;
+      color: #888;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+    .prices {
+      display: flex;
+      gap: 32px;
+    }
+    .price {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 16px 24px;
+    }
+    .price-label { font-size: 13px; color: #666; margin-bottom: 4px; }
+    .price-value { font-size: 22px; font-weight: 700; color: #10b981; }
+    .logo {
+      position: absolute;
+      top: 48px;
+      right: 80px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #fff;
+    }
+    .domain {
+      position: absolute;
+      bottom: 48px;
+      right: 80px;
+      font-size: 14px;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="glow"></div>
+  <div class="logo">MACHINA</div>
+  <div class="content">
+    <div class="badge">AI × 自動開発</div>
+    <h1>AIが<span>格安・最短</span>で<br>Webアプリを開発</h1>
+    <p>受注から納品まで全自動。フォーム入力だけで即対応。</p>
+    <div class="prices">
+      <div class="price">
+        <div class="price-label">LP制作</div>
+        <div class="price-value">3〜8万円</div>
+      </div>
+      <div class="price">
+        <div class="price-label">Webアプリ</div>
+        <div class="price-value">15〜40万円</div>
+      </div>
+      <div class="price">
+        <div class="price-label">最短納品</div>
+        <div class="price-value">24時間〜</div>
+      </div>
+    </div>
+  </div>
+  <div class="domain">ai-company.dev</div>
+</body>
+</html>

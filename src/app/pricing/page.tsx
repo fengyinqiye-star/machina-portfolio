@@ -7,11 +7,21 @@ export const metadata: Metadata = {
   description: "Machinaの開発費用・保守プランの料金一覧。受注から納品まで全自動のAI開発サービス。",
 };
 
-const DEV_PLANS = [
+type DevPlan = {
+  name: string;
+  price: string;
+  desc: string;
+  badge?: string;
+  features: string[];
+  highlight?: boolean;
+};
+
+const DEV_PLANS: DevPlan[] = [
   {
     name: "ライト",
-    price: "2万円〜",
+    price: "9,800円〜",
     desc: "LP・シンプルなWebサイト",
+    badge: "フリーランスの1/5",
     features: [
       "静的サイト・LP",
       "5ページ以内",
@@ -23,8 +33,9 @@ const DEV_PLANS = [
   },
   {
     name: "スタンダード",
-    price: "8万円〜",
+    price: "3.8万円〜",
     desc: "Webアプリ・多機能サイト",
+    badge: "制作会社の1/10",
     features: [
       "Webアプリ・管理画面",
       "認証・データベース連携",
@@ -53,7 +64,7 @@ const DEV_PLANS = [
 const MAINTENANCE_PLANS = [
   {
     name: "ライトプラン",
-    price: "5,000円",
+    price: "2,980円",
     unit: "月",
     features: [
       "Vercelホスティング維持",
@@ -64,7 +75,7 @@ const MAINTENANCE_PLANS = [
   },
   {
     name: "スタンダードプラン",
-    price: "10,000円",
+    price: "4,980円",
     unit: "月",
     features: [
       "Vercelホスティング維持",
@@ -75,6 +86,19 @@ const MAINTENANCE_PLANS = [
       "優先対応",
     ],
     highlight: true,
+  },
+  {
+    name: "プレミアムプラン",
+    price: "19,800円",
+    unit: "月",
+    features: [
+      "Vercelホスティング維持",
+      "修正・機能追加（無制限）",
+      "専任AIエージェント対応",
+      "稼働監視・障害即時対応",
+      "月次レポート",
+      "最優先対応",
+    ],
   },
 ];
 
@@ -111,9 +135,13 @@ export default function PricingPage() {
             <h1 className="text-4xl md:text-5xl font-bold text-[var(--text)] mb-4">
               シンプルな料金体系
             </h1>
-            <p className="text-[var(--muted)] leading-relaxed max-w-xl">
+            <p className="text-[var(--muted)] leading-relaxed max-w-xl mb-6">
               AIエージェントが全工程を自動実行するため、従来の開発会社より低コストで高品質な開発が可能です。
             </p>
+            <div className="inline-flex items-center gap-2 px-4 py-2 border text-sm font-semibold" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: "var(--accent)" }} />
+              初期ユーザー獲得キャンペーン中 — 実績作りのため大幅値下げ実施中
+            </div>
           </div>
         </section>
 
@@ -170,6 +198,14 @@ export default function PricingPage() {
                       Most Popular
                     </span>
                   )}
+                  {plan.badge && (
+                    <span
+                      className="text-[10px] tracking-widest uppercase font-mono mb-2 inline-block px-2 py-0.5 border"
+                      style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
+                    >
+                      {plan.badge}
+                    </span>
+                  )}
                   <div className={`text-xs tracking-widest uppercase mb-2 ${plan.highlight ? "text-[var(--bg)]" : "text-[var(--muted)]"}`}>
                     {plan.name}
                   </div>
@@ -204,6 +240,20 @@ export default function PricingPage() {
             <p className="text-xs text-[var(--muted)] mt-4">
               ※ 表示価格は税抜きです。要件によって変動する場合があります。
             </p>
+            <div className="mt-8 p-6 border border-[var(--border)] bg-[var(--bg)]">
+              <p className="text-sm font-semibold text-[var(--text)] mb-1">ライトとスタンダード、どちらか迷ったら？</p>
+              <p className="text-sm text-[var(--muted)] leading-relaxed">
+                プランは選ばなくて大丈夫です。フォームにやりたいことを書いて送信するだけで、
+                AIエージェントが内容を分析して最適なプランと費用をご提案します。
+              </p>
+              <a
+                href="/#contact"
+                className="inline-block mt-4 text-sm font-semibold underline underline-offset-4"
+                style={{ color: "var(--accent)" }}
+              >
+                まずは内容を送ってみる →
+              </a>
+            </div>
           </div>
         </section>
 
@@ -217,7 +267,7 @@ export default function PricingPage() {
               加入しない場合も30日間は無償サポートを提供します。
             </p>
 
-            <div className="grid md:grid-cols-2 gap-px bg-[var(--border)] max-w-2xl">
+            <div className="grid md:grid-cols-3 gap-px bg-[var(--border)]">
               {MAINTENANCE_PLANS.map((plan) => (
                 <div
                   key={plan.name}

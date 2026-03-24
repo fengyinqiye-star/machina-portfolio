@@ -41,7 +41,7 @@ export async function createPaymentLink(params: {
     metadata: { orderId, projectName },
     after_completion: {
       type: "redirect",
-      redirect: { url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://ai-company-portfolio.vercel.app"}/thanks?order=${orderId}&paid=true` },
+      redirect: { url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://ai-company.dev"}/thanks?order=${orderId}&paid=true` },
     },
     customer_creation: "always",
     billing_address_collection: "required",
