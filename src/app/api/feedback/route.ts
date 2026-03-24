@@ -29,7 +29,10 @@ async function getBriefInfo(orderId: string): Promise<{ toEmail: string; contact
     const token = process.env.BLOB_READ_WRITE_TOKEN!;
     const briefResult = await list({ prefix: `orders/${orderId}/brief.md`, token });
     if (briefResult.blobs.length === 0) return null;
-    const briefText = await fetch(briefResult.blobs[0].downloadUrl)
+    // プライベート Blob は Authorization ヘッダーが必要
+    const briefText = await fetch(briefResult.blobs[0].url, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((r) => r.arrayBuffer())
       .then((buf) => Buffer.from(buf).toString("utf-8"));
     return {
