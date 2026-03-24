@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put, list } from "@vercel/blob";
-import { checkRateLimit } from "@/lib/rateLimit";
+import { checkRateLimit, isValidOrderId } from "@/lib/rateLimit";
 
 // brief.md から保守プランを解析
 function parsePlan(content: string): "none" | "basic" | "standard" | "premium" {
@@ -22,17 +22,31 @@ async function countThisMonthRevisions(orderId: string): Promise<number> {
   return result.blobs.filter((b) => new Date(b.uploadedAt) >= monthStart).length;
 }
 
+// brief.md から顧客情報を取得
+async function getBriefInfo(orderId: string): Promise<{ toEmail: string; contactName: string; projectName: string; plan: "none" | "basic" | "standard" | "premium" } | null> {
+  if (!process.env.VERCEL_ENV) return null;
+  try {
+    const token = process.env.BLOB_READ_WRITE_TOKEN!;
+    const briefResult = await list({ prefix: `orders/${orderId}/brief.md`, token });
+    if (briefResult.blobs.length === 0) return null;
+    const briefText = await fetch(briefResult.blobs[0].downloadUrl)
+      .then((r) => r.arrayBuffer())
+      .then((buf) => Buffer.from(buf).toString("utf-8"));
+    return {
+      toEmail: briefText.match(/- メールアドレス: ([^\n]+)/)?.[1]?.trim() ?? "",
+      contactName: briefText.match(/- お名前: ([^\n]+)/)?.[1]?.trim() ?? "お客様",
+      projectName: briefText.match(/^# 案件依頼: (.+)/m)?.[1]?.trim() ?? orderId,
+      plan: parsePlan(briefText),
+    };
+  } catch {
+    return null;
+  }
+}
+
 // アップグレード案内メールを送信
 async function sendUpgradeMail(toEmail: string, contactName: string, projectName: string) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return;
-  const html = `
-    <p>${contactName} 様</p>
-    <p>「${projectName}」の今月の修正依頼が上限（月2回）に達しました。</p>
-    <p>スタンダードプラン（¥4,980/月）にアップグレードすると、修正が無制限になります。</p>
-    <p><a href="https://ai-company.dev/pricing">プランのご確認はこちら</a></p>
-    <p>引き続きよろしくお願いいたします。<br>Machina</p>
-  `;
   await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
@@ -40,7 +54,13 @@ async function sendUpgradeMail(toEmail: string, contactName: string, projectName
       from: "Machina <noreply@ai-company.dev>",
       to: toEmail,
       subject: `【Machina】修正依頼の上限に達しました — ${projectName}`,
-      html,
+      html: `
+        <p>${contactName} 様</p>
+        <p>「${projectName}」の今月の修正依頼が上限（月2回）に達しました。</p>
+        <p>スタンダードプラン（¥4,980/月）にアップグレードすると、修正が無制限になります。</p>
+        <p><a href="https://ai-company.dev/pricing">プランのご確認はこちら</a></p>
+        <p>引き続きよろしくお願いいたします。<br>Machina</p>
+      `,
     }),
   });
 }
@@ -62,53 +82,28 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, error: "リクエストの形式が正しくありません。" }, { status: 400 });
   }
 
-  const { orderId, feedback, revisionNo } = body as {
+  const { orderId, feedback } = body as {
     orderId: string;
     feedback: string;
-    revisionNo: number;
+    revisionNo?: number;
   };
 
   if (!orderId || !feedback) {
     return NextResponse.json({ success: false, error: "必須項目が不足しています。" }, { status: 422 });
   }
-
-  // --- 保守プランによる修正回数チェック（Vercel環境のみ） ---
-  if (process.env.VERCEL_ENV) {
-    try {
-      const token = process.env.BLOB_READ_WRITE_TOKEN!;
-      const briefResult = await list({ prefix: `orders/${orderId}/brief.md`, token });
-      if (briefResult.blobs.length > 0) {
-        const briefText = await fetch(briefResult.blobs[0].downloadUrl).then((r) => r.arrayBuffer()).then((buf) => Buffer.from(buf).toString("utf-8"));
-        const plan = parsePlan(briefText);
-
-        if (plan === "basic") {
-          const count = await countThisMonthRevisions(orderId);
-          if (count >= 2) {
-            // メールアドレスと名前を brief.md から取得
-            const emailMatch = briefText.match(/- メールアドレス: ([^\n]+)/);
-            const nameMatch = briefText.match(/- お名前: ([^\n]+)/);
-            const titleMatch = briefText.match(/^# 案件依頼: (.+)/m);
-            const toEmail = emailMatch?.[1]?.trim() ?? "";
-            const contactName = nameMatch?.[1]?.trim() ?? "お客様";
-            const projectName = titleMatch?.[1]?.trim() ?? orderId;
-            if (toEmail) await sendUpgradeMail(toEmail, contactName, projectName);
-            return NextResponse.json(
-              {
-                success: false,
-                error: "今月の修正依頼が上限（月2回）に達しました。スタンダードプランへのアップグレードをご検討ください。",
-                upgradeUrl: "https://ai-company.dev/pricing",
-              },
-              { status: 429 }
-            );
-          }
-        }
-      }
-    } catch {
-      // チェック失敗時は通す（サービス継続優先）
-    }
+  if (!isValidOrderId(orderId)) {
+    return NextResponse.json({ success: false, error: "無効な案件IDです。" }, { status: 422 });
   }
 
-  const rev = revisionNo ?? 1;
+  // Blobの既存revision数を数えて次番号を決定（クライアント送信値は使わない）
+  let rev = 1;
+  try {
+    const token = process.env.BLOB_READ_WRITE_TOKEN!;
+    const existing = await list({ prefix: `orders/${orderId}/revision-`, token });
+    rev = existing.blobs.length + 1;
+  } catch {
+    // Blob取得失敗時はフォールバック（保存は続行）
+  }
   const content = `# 修正依頼 #${rev}: ${orderId}
 
 受付日時: ${new Date().toISOString()}
@@ -119,11 +114,13 @@ export async function POST(request: NextRequest) {
 ${feedback}
 `;
 
+  // --- Step 1: まず保存（ユーザー入力を失わない） ---
   try {
     if (process.env.VERCEL_ENV) {
       await put(`orders/${orderId}/revision-${String(rev).padStart(3, "0")}.md`, content, {
         access: "private",
         contentType: "text/markdown",
+        allowOverwrite: true,
       });
     } else {
       const fs = await import("fs");
@@ -141,38 +138,50 @@ ${feedback}
     return NextResponse.json({ success: false, error: "保存に失敗しました" }, { status: 500 });
   }
 
-  // 修正依頼受付メールを送信
-  try {
-    const { list: blobList } = await import("@vercel/blob");
-    const { sendRevisionConfirmation } = await import("@/lib/email");
-    const token = process.env.BLOB_READ_WRITE_TOKEN!;
-    const briefResult = await blobList({ prefix: `orders/${orderId}/brief.md`, token });
-    if (briefResult.blobs.length > 0) {
-      const briefText = await fetch(briefResult.blobs[0].downloadUrl)
-        .then((r) => r.arrayBuffer())
-        .then((buf) => Buffer.from(buf).toString("utf-8"));
-      const emailMatch = briefText.match(/- メールアドレス: ([^\n]+)/);
-      const nameMatch = briefText.match(/- お名前: ([^\n]+)/);
-      const titleMatch = briefText.match(/^# 案件依頼: (.+)/m);
-      const toEmail = emailMatch?.[1]?.trim() ?? "";
-      const contactName = nameMatch?.[1]?.trim() ?? "お客様";
-      const projectName = titleMatch?.[1]?.trim() ?? orderId;
-      if (toEmail) {
-        await sendRevisionConfirmation({
-          to: toEmail,
-          contactName,
-          projectName,
-          feedback,
-          revisionNo: rev,
-          orderId,
-        });
+  // --- Step 2: brief.md から顧客情報・プランを取得 ---
+  const briefInfo = await getBriefInfo(orderId);
+
+  // --- Step 3: 保守プランによる修正回数チェック（basicプランのみ） ---
+  if (briefInfo?.plan === "basic") {
+    try {
+      const count = await countThisMonthRevisions(orderId);
+      if (count > 2) {
+        // ファイルは保存済みだが、webhookは送らない（処理させない）
+        if (briefInfo.toEmail) {
+          sendUpgradeMail(briefInfo.toEmail, briefInfo.contactName, briefInfo.projectName).catch(() => {});
+        }
+        return NextResponse.json(
+          {
+            success: false,
+            error: "今月の修正依頼が上限（月2回）に達しました。スタンダードプランへのアップグレードをご検討ください。",
+            upgradeUrl: "https://ai-company.dev/pricing",
+          },
+          { status: 429 }
+        );
       }
+    } catch {
+      // チェック失敗時は通す（サービス継続優先）
     }
-  } catch {
-    // メール失敗は無視
   }
 
-  // Webhookサーバーに修正依頼トリガーを送信
+  // --- Step 4: 受付確認メールを送信 ---
+  if (briefInfo?.toEmail) {
+    try {
+      const { sendRevisionConfirmation } = await import("@/lib/email");
+      await sendRevisionConfirmation({
+        to: briefInfo.toEmail,
+        contactName: briefInfo.contactName,
+        projectName: briefInfo.projectName,
+        feedback,
+        revisionNo: rev,
+        orderId,
+      });
+    } catch {
+      // メール失敗は無視
+    }
+  }
+
+  // --- Step 5: Webhookサーバーに修正依頼トリガーを送信 ---
   try {
     const { triggerWebhook } = await import("@/lib/triggerWebhook");
     triggerWebhook(orderId, "revision.received").catch(() => {});
