@@ -64,6 +64,15 @@ ${data.overview}
 
 ## 技術要望
 ${data.techRequirements ?? "特に指定なし"}
+
+## 希望ドメイン
+${data.customDomain && data.customDomain.length > 0 ? data.customDomain : "なし（Vercel URL で納品）"}
+
+## 保守プラン
+${data.maintenancePlan === "basic" ? "基本プラン（月額 ¥5,000）— ホスティング・SSL・軽微なバグ修正" :
+  data.maintenancePlan === "standard" ? "スタンダードプラン（月額 ¥10,000）— 基本 + セキュリティアップデート・月1回改善" :
+  data.maintenancePlan === "premium" ? "プレミアムプラン（月額 ¥19,800）— スタンダード + 優先対応・月2回改善" :
+  "なし（一括払い・コード移管）"}
 `;
 
   try {

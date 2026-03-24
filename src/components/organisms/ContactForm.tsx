@@ -16,11 +16,14 @@ export function ContactForm() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<OrderInput>({
     resolver: zodResolver(orderSchema),
-    defaultValues: { honeypot: "" },
+    defaultValues: { honeypot: "", maintenancePlan: "none", customDomain: "" },
   });
+
+  const selectedPlan = watch("maintenancePlan");
 
   const onSubmit = async (data: OrderInput) => {
     setServerError(null);
@@ -89,6 +92,56 @@ export function ContactForm() {
           error={errors.techRequirements?.message}
           {...register("techRequirements")}
         />
+      </FormField>
+
+      <FormField
+        label="希望ドメイン"
+        htmlFor="customDomain"
+        error={errors.customDomain?.message}
+        hint="お持ちのドメインがあれば入力してください。ない場合は無料の Vercel URL（xxx.vercel.app）で納品します"
+      >
+        <Input
+          id="customDomain"
+          placeholder="例: myshop.com（任意）"
+          error={errors.customDomain?.message}
+          {...register("customDomain")}
+        />
+      </FormField>
+
+      {/* 保守プラン選択 */}
+      <FormField label="保守プラン" htmlFor="maintenancePlan" error={errors.maintenancePlan?.message}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1">
+          {[
+            { value: "none",     label: "なし",         sub: "一括払い・コード移管" },
+            { value: "basic",    label: "基本プラン",    sub: "月額 ¥5,000 / ホスティング込み" },
+            { value: "standard", label: "スタンダード",  sub: "月額 ¥10,000 / 月1回改善" },
+            { value: "premium",  label: "プレミアム",    sub: "月額 ¥19,800 / 優先対応" },
+          ].map(({ value, label, sub }) => {
+            const checked = selectedPlan === value;
+            return (
+              <label
+                key={value}
+                className={[
+                  "flex items-start gap-3 p-4 border cursor-pointer transition-colors",
+                  checked
+                    ? "border-[var(--accent)] bg-[var(--accent)]/5"
+                    : "border-[var(--border)] hover:border-[var(--muted)]",
+                ].join(" ")}
+              >
+                <input
+                  type="radio"
+                  value={value}
+                  className="mt-1 shrink-0 accent-[var(--accent)]"
+                  {...register("maintenancePlan")}
+                />
+                <span>
+                  <span className="block text-sm font-medium text-[var(--text)]">{label}</span>
+                  <span className="block text-xs text-[var(--muted)] mt-0.5">{sub}</span>
+                </span>
+              </label>
+            );
+          })}
+        </div>
       </FormField>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

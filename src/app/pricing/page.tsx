@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const DEV_PLANS = [
   {
     name: "ライト",
-    price: "5万円〜",
+    price: "2万円〜",
     desc: "LP・シンプルなWebサイト",
     features: [
       "静的サイト・LP",
@@ -23,7 +23,7 @@ const DEV_PLANS = [
   },
   {
     name: "スタンダード",
-    price: "15万円〜",
+    price: "8万円〜",
     desc: "Webアプリ・多機能サイト",
     features: [
       "Webアプリ・管理画面",
@@ -114,6 +114,39 @@ export default function PricingPage() {
             <p className="text-[var(--muted)] leading-relaxed max-w-xl">
               AIエージェントが全工程を自動実行するため、従来の開発会社より低コストで高品質な開発が可能です。
             </p>
+          </div>
+        </section>
+
+        {/* なぜ低価格か */}
+        <section className="py-16 px-6 border-b border-[var(--border)]">
+          <div className="max-w-4xl mx-auto">
+            <p className="text-xs tracking-widest uppercase mb-4" style={{ color: "var(--accent)" }}>
+              Why so affordable?
+            </p>
+            <h2 className="text-2xl font-bold text-[var(--text)] mb-8">
+              なぜフリーランスの1/5の価格が実現できるのか
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  title: "人件費ゼロ",
+                  body: "AIエージェントが要件定義・設計・実装・テスト・デプロイを自動実行します。人間のエンジニアへの報酬が発生しません。",
+                },
+                {
+                  title: "24時間稼働",
+                  body: "AIは休まず並列で動きます。人間なら数週間かかる工程を、24時間以内に完了します。時間コストが根本的に異なります。",
+                },
+                {
+                  title: "品質は落とさない",
+                  body: "テストカバレッジ80%以上・セキュリティレビュー・コードレビューをすべてAIが実施。安いからといって手を抜きません。",
+                },
+              ].map(({ title, body }) => (
+                <div key={title} className="border-l-2 pl-6" style={{ borderColor: "var(--accent)" }}>
+                  <p className="font-semibold text-[var(--text)] mb-2">{title}</p>
+                  <p className="text-sm text-[var(--muted)] leading-relaxed">{body}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
