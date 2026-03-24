@@ -193,6 +193,10 @@ export async function GET(
 ) {
   const { orderId } = params;
 
+  if (!orderId || !/^[a-zA-Z0-9_\-\.]{1,80}$/.test(orderId) || orderId.includes("..")) {
+    return NextResponse.json({ error: "Invalid orderId" }, { status: 422 });
+  }
+
   if (process.env.VERCEL_ENV) {
     try {
       const result = await getOrderStatusFromBlob(orderId);
