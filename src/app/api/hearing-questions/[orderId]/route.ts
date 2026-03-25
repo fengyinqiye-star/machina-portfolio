@@ -27,9 +27,9 @@ function parseQuestions(md: string): { key: string; label: string; placeholder: 
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { orderId: string } }
+  { params }: { params: Promise<{ orderId: string }> }
 ) {
-  const { orderId } = params;
+  const { orderId } = await params;
 
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   const { checkRateLimit, isValidOrderId } = await import("@/lib/rateLimit");

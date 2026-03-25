@@ -18,12 +18,6 @@ function esc(str: string): string {
     .replace(/'/g, "&#x27;");
 }
 
-// RFC 2047 B-encoding: 非ASCII文字を含む件名をメールクライアント互換に変換
-function encodeSubject(subject: string): string {
-  if (/^[\x20-\x7E]*$/.test(subject)) return subject;
-  const b64 = Buffer.from(subject, "utf8").toString("base64");
-  return `=?UTF-8?B?${b64}?=`;
-}
 
 export async function sendOrderConfirmation(params: {
   to: string;
@@ -42,7 +36,7 @@ export async function sendOrderConfirmation(params: {
   await resend.emails.send({
     from: FROM_ADDRESS,
     to,
-    subject: encodeSubject(`【受注確認】${projectName} のご依頼を受け付けました`),
+    subject: `【受注確認】${projectName} のご依頼を受け付けました`,
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -51,13 +45,13 @@ export async function sendOrderConfirmation(params: {
   <h1 style="font-size: 20px; margin-bottom: 8px;">${COMPANY_NAME}</h1>
   <p style="color: #88857f; font-size: 13px; margin-bottom: 32px;">AI-Powered Development</p>
 
-  <p>${contactName} 様</p>
+  <p>${esc(contactName)} 様</p>
   <p>このたびはご依頼いただきありがとうございます。<br>以下の案件を受け付けました。</p>
 
   <table style="border-collapse: collapse; margin: 24px 0; width: 100%;">
     <tr>
       <td style="padding: 8px 16px 8px 0; color: #88857f; font-size: 13px; white-space: nowrap;">案件名</td>
-      <td style="padding: 8px 0; font-weight: bold;">${projectName}</td>
+      <td style="padding: 8px 0; font-weight: bold;">${esc(projectName)}</td>
     </tr>
     <tr>
       <td style="padding: 8px 16px 8px 0; color: #88857f; font-size: 13px;">案件ID</td>
@@ -104,7 +98,7 @@ export async function sendDeliveryNotification(params: {
   await resend.emails.send({
     from: FROM_ADDRESS,
     to,
-    subject: encodeSubject(`【納品完了】${projectName} の開発が完了しました`),
+    subject: `【納品完了】${projectName} の開発が完了しました`,
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -172,7 +166,7 @@ export async function sendRevisionConfirmation(params: {
   await resend.emails.send({
     from: FROM_ADDRESS,
     to,
-    subject: encodeSubject(`【修正依頼受付】${projectName}`),
+    subject: `【修正依頼受付】${projectName}`,
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -181,7 +175,7 @@ export async function sendRevisionConfirmation(params: {
   <h2 style="color: #111; font-size: 20px; margin-bottom: 4px;">Machina</h2>
   <hr style="border: none; border-top: 1px solid #e0ddd8; margin: 16px 0 24px;">
 
-  <p>${contactName} 様</p>
+  <p>${esc(contactName)} 様</p>
   <p>修正依頼 #${revisionNo} を受け付けました。<br>内容を確認次第、対応を開始いたします。</p>
 
   <div style="background: #f5f4f0; border-left: 3px solid #a8e63a; padding: 16px 20px; margin: 24px 0; border-radius: 0 6px 6px 0;">
@@ -190,7 +184,7 @@ export async function sendRevisionConfirmation(params: {
   </div>
 
   <table style="border-collapse: collapse; margin: 24px 0; width: 100%;">
-    <tr><td style="padding: 6px 16px 6px 0; color: #88857f; font-size: 13px;">案件名</td><td>${projectName}</td></tr>
+    <tr><td style="padding: 6px 16px 6px 0; color: #88857f; font-size: 13px;">案件名</td><td>${esc(projectName)}</td></tr>
     <tr><td style="padding: 6px 16px 6px 0; color: #88857f; font-size: 13px;">修正番号</td><td>#${revisionNo}</td></tr>
   </table>
 
@@ -221,7 +215,7 @@ export async function sendOwnerNotification(params: {
   await resend.emails.send({
     from: FROM_ADDRESS,
     to: OWNER_EMAIL,
-    subject: encodeSubject(`【新規受注】${projectName}`),
+    subject: `【新規受注】${projectName}`,
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -231,9 +225,9 @@ export async function sendOwnerNotification(params: {
 
   <table style="border-collapse: collapse; margin: 24px 0; width: 100%;">
     <tr><td style="padding: 6px 16px 6px 0; color: #88857f; font-size: 13px;">案件ID</td><td style="font-family: monospace; font-size: 13px;">${orderId}</td></tr>
-    <tr><td style="padding: 6px 16px 6px 0; color: #88857f; font-size: 13px;">案件名</td><td style="font-weight: bold;">${projectName}</td></tr>
-    <tr><td style="padding: 6px 16px 6px 0; color: #88857f; font-size: 13px;">依頼者</td><td>${contactName}（${contactEmail}）</td></tr>
-    <tr><td style="padding: 6px 16px 6px 0; color: #88857f; font-size: 13px; vertical-align: top;">概要</td><td>${overview}</td></tr>
+    <tr><td style="padding: 6px 16px 6px 0; color: #88857f; font-size: 13px;">案件名</td><td style="font-weight: bold;">${esc(projectName)}</td></tr>
+    <tr><td style="padding: 6px 16px 6px 0; color: #88857f; font-size: 13px;">依頼者</td><td>${esc(contactName)}（${esc(contactEmail)}）</td></tr>
+    <tr><td style="padding: 6px 16px 6px 0; color: #88857f; font-size: 13px; vertical-align: top;">概要</td><td style="white-space: pre-wrap;">${esc(overview)}</td></tr>
   </table>
 
   <hr style="border: none; border-top: 1px solid #e0ddd8; margin: 32px 0;">
@@ -262,7 +256,7 @@ export async function sendCancellationConfirmation(params: {
   await resend.emails.send({
     from: FROM_ADDRESS,
     to,
-    subject: encodeSubject(`【解約完了】${esc(projectName)} の保守プランを解約しました`),
+    subject: `【解約完了】${projectName} の保守プランを解約しました`,
     html: `
 <!DOCTYPE html>
 <html lang="ja">

@@ -25,11 +25,17 @@ export const orderSchema = z.object({
     .optional()
     .default(""),
   maintenancePlan: z
-    .enum(["none", "basic", "standard", "premium"])
+    .enum(["none", "light", "standard", "premium"])
     .optional()
     .default("none"),
   // honeypotはルートハンドラで長さチェックするのでスキーマでは制約しない
   honeypot: z.string().optional().default(""),
+  referralCode: z
+    .string()
+    .max(32)
+    .regex(/^$|^[a-zA-Z0-9_-]{3,32}$/, "紹介コードの形式が正しくありません")
+    .optional()
+    .default(""),
 });
 
 export type OrderInput = z.infer<typeof orderSchema>;

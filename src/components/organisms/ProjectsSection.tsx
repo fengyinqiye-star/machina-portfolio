@@ -30,6 +30,11 @@ export function ProjectsSection() {
                 <p className="text-xs text-[var(--muted)] leading-relaxed mb-4 line-clamp-2">
                   {project.description}
                 </p>
+                {project.outcome && (
+                  <p className="text-[11px] font-mono mb-3 px-2 py-1 border" style={{ color: "var(--accent)", borderColor: "var(--accent)", opacity: 0.85 }}>
+                    📈 {project.outcome}
+                  </p>
+                )}
                 <div className="flex flex-wrap gap-1 mt-auto">
                   {project.techStack.slice(0, 3).map((tech) => (
                     <span

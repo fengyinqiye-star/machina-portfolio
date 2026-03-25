@@ -136,6 +136,31 @@ function OrderStatusContent() {
               </div>
             )}
 
+            {/* アクションボタン */}
+            {data.progressPercent >= 100 && (
+              <div className="mt-10 pt-8 border-t border-[#1E1E1C] grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <a
+                  href={`/feedback/${orderId}`}
+                  className="flex items-center justify-center gap-2 px-4 py-3 border border-[#333] text-[#e8e5df] text-xs font-mono hover:border-[#a8e63a] hover:text-[#a8e63a] transition-colors"
+                >
+                  ✏️ 修正を依頼する
+                </a>
+                <a
+                  href={`/acceptance/${orderId}`}
+                  className="flex items-center justify-center gap-2 px-4 py-3 border text-xs font-mono transition-colors"
+                  style={{ borderColor: "#a8e63a", color: "#a8e63a" }}
+                >
+                  ✅ 検収確認する
+                </a>
+                <a
+                  href={`/subscription/${orderId}`}
+                  className="flex items-center justify-center gap-2 px-4 py-3 border border-[#333] text-[#555250] text-xs font-mono hover:border-[#555] hover:text-[#888] transition-colors"
+                >
+                  ⚙️ プラン管理
+                </a>
+              </div>
+            )}
+
             {/* 更新時刻 */}
             <p className="mt-10 text-xs text-[#333] font-mono">
               最終更新: {lastUpdated}（30秒ごとに自動更新）

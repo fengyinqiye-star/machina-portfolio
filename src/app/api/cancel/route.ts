@@ -19,9 +19,11 @@ export async function GET(request: NextRequest) {
   if (!sub) return NextResponse.json({ active: false });
 
   const refundAmount = calcRefundAmount(sub);
-  // current_period_end は number (Unix timestamp)
-  const periodEndTs = (sub as unknown as { current_period_end: number }).current_period_end;
-  const periodEnd = new Date(periodEndTs * 1000).toLocaleDateString("ja-JP");
+  // current_period_end は number (Unix timestamp)。未定義の場合は "不明" と表示する
+  const periodEndTs = (sub as unknown as { current_period_end?: number }).current_period_end;
+  const periodEnd = periodEndTs
+    ? new Date(periodEndTs * 1000).toLocaleDateString("ja-JP")
+    : "不明";
 
   return NextResponse.json({
     active: true,
@@ -133,9 +135,12 @@ async function findSubscription(orderId: string): Promise<Sub | null> {
 function calcRefundAmount(sub: Sub): number {
   const now = Math.floor(Date.now() / 1000);
   // Stripe v2026 では current_period_* は items 経由になる場合があるため unknown キャスト
-  const raw = sub as unknown as { current_period_start: number; current_period_end: number };
-  const totalSec = raw.current_period_end - raw.current_period_start;
-  const unusedSec = raw.current_period_end - now;
+  const raw = sub as unknown as { current_period_start?: number; current_period_end?: number };
+  const periodStart = raw.current_period_start;
+  const periodEnd = raw.current_period_end;
+  if (!periodStart || !periodEnd) return 0;
+  const totalSec = periodEnd - periodStart;
+  const unusedSec = periodEnd - now;
   if (unusedSec <= 0 || totalSec <= 0) return 0;
 
   const unitAmount = sub.items.data[0]?.price?.unit_amount ?? 0;

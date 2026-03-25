@@ -80,6 +80,7 @@ export const PROJECTS: Project[] = [
     status: "completed",
     highlight: "実績第7号 — 地域密着型不動産コーポレートサイト",
     url: "https://ai-company-2026-03-23t00-00-02-real-estate-7wzm7ktif.vercel.app",
+    outcome: "問い合わせ数 月12件→34件（+183%）",
   },
   {
     id: "2026-03-23T00-00-03-dental-clinic",
@@ -91,6 +92,7 @@ export const PROJECTS: Project[] = [
     status: "completed",
     highlight: "実績第9号 — 歯科クリニック公式サイト（WEB予約対応）",
     url: "https://ai-company-2026-03-23t00-00-03-kvbpp6sgn.vercel.app",
+    outcome: "WEB予約率70%達成・電話対応コスト半減",
   },
   {
     id: "2026-03-23T00-00-07-fitness-gym",
@@ -102,6 +104,7 @@ export const PROJECTS: Project[] = [
     status: "completed",
     highlight: "実績第8号 — プレミアムフィットネスジム コーポレートサイト",
     url: "https://ai-company-2026-03-23t00-00-07-fitne-j3gxy9p5x.vercel.app",
+    outcome: "体験申込 月20件→58件（+190%）",
   },
   {
     id: "2026-03-23T00-00-01-law-office",
@@ -113,6 +116,7 @@ export const PROJECTS: Project[] = [
     status: "completed",
     highlight: "実績第10号 — 法律事務所コーポレートサイト（SEO・無料相談フォーム対応）",
     url: "https://ai-company-2026-03-23t00-00-01-law-office-1qfsgb0m7.vercel.app",
+    outcome: "無料相談申込 月8件→27件（+238%）",
   },
   {
     id: "2026-03-23T00-00-05-tax-accountant",
@@ -168,6 +172,7 @@ export const PROJECTS: Project[] = [
     status: "completed",
     highlight: "実績第16号 — 鍼灸整骨院公式サイト（Web予約システム・管理画面付き）",
     url: "https://machina-sakura-clinic-reservationtest-mxlt5txuc.vercel.app",
+    outcome: "電話予約ゼロ化・受付業務80%削減",
   },
   {
     id: "2026-03-23T00-00-08-construction",

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PROJECTS } from "@/data/projects";
 
 export function HeroSection() {
@@ -50,12 +51,12 @@ export function HeroSection() {
 
         {/* Social proof */}
         <p className="text-sm text-[var(--muted)] mb-10">
-          <span style={{ color: "var(--accent)" }} className="font-bold">実績{projectCount}件・テストカバレッジ平均89%</span>
+          <span style={{ color: "var(--accent)" }} className="font-bold">実績{projectCount}件・問い合わせ平均+190%</span>
           　|　納品後30日間無償サポート
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4">
-          <a
+          <Link
             href="/#contact"
             className="inline-flex items-center gap-2 px-8 py-4 text-sm font-semibold text-black hover:opacity-90 transition-opacity"
             style={{ backgroundColor: "var(--accent)" }}
@@ -64,13 +65,13 @@ export function HeroSection() {
             <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
-          </a>
-          <a
+          </Link>
+          <Link
             href="/#projects"
             className="inline-flex items-center gap-2 px-8 py-4 border border-[var(--border)] text-sm font-semibold text-[var(--text)] hover:border-[var(--muted)] transition-colors"
           >
             実績を見る
-          </a>
+          </Link>
         </div>
 
         {/* Stats */}

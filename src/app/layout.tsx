@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
   alternates: {
-    canonical: siteUrl,
+    canonical: "/",
   },
   robots: {
     index: true,
@@ -96,14 +96,14 @@ const jsonLd = {
         {
           "@type": "Offer",
           name: "ランディングページ制作",
-          priceRange: "30000-80000",
+          priceRange: "9800-30000",
           priceCurrency: "JPY",
           description: "1ページのLP制作。最短24時間納品。",
         },
         {
           "@type": "Offer",
           name: "Webアプリ開発",
-          priceRange: "150000-400000",
+          priceRange: "38000-150000",
           priceCurrency: "JPY",
           description: "カスタムWebアプリケーション開発。",
         },

@@ -4,7 +4,13 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "料金プラン",
-  description: "Machinaの開発費用・保守プランの料金一覧。受注から納品まで全自動のAI開発サービス。",
+  description: "Machinaの開発費用・保守プランの料金一覧。LP制作9,800円〜、Webアプリ3.8万円〜。受注から納品まで全自動のAI開発サービス。",
+  alternates: { canonical: "https://ai-company.dev/pricing" },
+  openGraph: {
+    title: "料金プラン | Machina",
+    description: "LP制作9,800円〜、Webアプリ3.8万円〜。AIエージェントが全自動で開発。制作会社の1/10のコストを実現。",
+    url: "https://ai-company.dev/pricing",
+  },
 };
 
 type DevPlan = {
@@ -254,13 +260,13 @@ export default function PricingPage() {
                 プランは選ばなくて大丈夫です。フォームにやりたいことを書いて送信するだけで、
                 AIエージェントが内容を分析して最適なプランと費用をご提案します。
               </p>
-              <a
+              <Link
                 href="/#contact"
                 className="inline-block mt-4 text-sm font-semibold underline underline-offset-4"
                 style={{ color: "var(--accent)" }}
               >
                 まずは内容を送ってみる →
-              </a>
+              </Link>
             </div>
           </div>
         </section>
@@ -307,6 +313,73 @@ export default function PricingPage() {
             </div>
             <p className="text-xs text-[var(--muted)] mt-4">
               ※ 保守プランは納品後の申込みページからご加入いただけます。
+            </p>
+          </div>
+        </section>
+
+        {/* AIオプション */}
+        <section className="py-20 px-6 border-b border-[var(--border)]">
+          <div className="max-w-5xl mx-auto">
+            <p className="text-xs text-[var(--muted)] tracking-widest uppercase mb-2">AI Add-ons</p>
+            <h2 className="text-2xl font-bold text-[var(--text)] mb-4">AIオプションメニュー</h2>
+            <p className="text-[var(--muted)] text-sm mb-12">
+              開発時に追加可能なAI機能オプションです。通常の開発費用に加算されます。
+            </p>
+            <div className="grid md:grid-cols-2 gap-px bg-[var(--border)]">
+              {[
+                {
+                  name: "AIチャットサポート",
+                  price: "+¥8,000",
+                  desc: "サイト内にAIチャットボットを組み込みます。FAQへの自動回答・問い合わせ前フィルタリングに活用できます。",
+                  tags: ["Claude API", "ストリーミング"],
+                },
+                {
+                  name: "AI文章生成機能",
+                  price: "+¥5,000",
+                  desc: "ブログ・商品説明・メール下書きなどをAIが自動生成するCMS向け機能です。",
+                  tags: ["Claude API", "Next.js"],
+                },
+                {
+                  name: "AI画像分析",
+                  price: "+¥10,000",
+                  desc: "アップロードされた画像をAIが分析・タグ付けする機能です。ECサイトの商品管理や医療系アプリに適しています。",
+                  tags: ["Claude Vision", "Blob Storage"],
+                },
+                {
+                  name: "AIレコメンド",
+                  price: "+¥12,000",
+                  desc: "ユーザーの行動履歴・閲覧パターンをもとにAIがパーソナライズされたコンテンツを推薦します。",
+                  tags: ["Embedding", "Vector DB"],
+                },
+                {
+                  name: "AI音声認識",
+                  price: "+¥8,000",
+                  desc: "音声入力・議事録自動生成・音声コマンド対応を追加します。Web Speech API + AI後処理で高精度を実現。",
+                  tags: ["Whisper API", "Web Speech API"],
+                },
+                {
+                  name: "RAG（社内文書検索）",
+                  price: "+¥20,000",
+                  desc: "社内マニュアル・PDF・テキストデータをもとにAIが質問に回答するRAGシステムを構築します。",
+                  tags: ["Embedding", "Vector Search", "Claude API"],
+                },
+              ].map((opt) => (
+                <div key={opt.name} className="p-6 bg-[var(--bg-2)] flex flex-col gap-3">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <p className="font-semibold text-[var(--text)]">{opt.name}</p>
+                    <span className="text-sm font-mono shrink-0" style={{ color: "var(--accent)" }}>{opt.price}</span>
+                  </div>
+                  <p className="text-sm text-[var(--muted)] leading-relaxed">{opt.desc}</p>
+                  <div className="flex flex-wrap gap-1 mt-auto">
+                    {opt.tags.map((t) => (
+                      <span key={t} className="text-[10px] font-mono px-2 py-0.5 border border-[var(--border)] text-[var(--muted)]">{t}</span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-[var(--muted)] mt-4">
+              ※ AIオプションはAPI利用料が別途発生する場合があります。ご依頼時にご相談ください。
             </p>
           </div>
         </section>

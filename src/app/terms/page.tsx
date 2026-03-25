@@ -1,8 +1,14 @@
 import { NavBar } from "@/components/molecules/NavBar";
 
 export const metadata = {
-  title: "利用規約・個人情報取り扱い | Machina",
+  title: "利用規約・個人情報取り扱い",
   description: "Machinaのサービス利用規約および個人情報の取り扱いについて",
+  alternates: { canonical: "https://ai-company.dev/terms" },
+  openGraph: {
+    title: "利用規約・個人情報取り扱い | Machina",
+    description: "Machinaのサービス利用規約および個人情報の取り扱いについて",
+    url: "https://ai-company.dev/terms",
+  },
 };
 
 export default function TermsPage() {

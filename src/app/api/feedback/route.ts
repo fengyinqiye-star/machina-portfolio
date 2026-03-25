@@ -3,13 +3,13 @@ import { put, list } from "@vercel/blob";
 import { checkRateLimit, isValidOrderId } from "@/lib/rateLimit";
 
 // brief.md から保守プランを解析
-function parsePlan(content: string): "none" | "basic" | "standard" | "premium" {
+function parsePlan(content: string): "none" | "light" | "standard" | "premium" {
   const match = content.match(/## 保守プラン\n([^\n]+)/);
   if (!match) return "none";
   const line = match[1];
   if (line.includes("プレミアム")) return "premium";
   if (line.includes("スタンダード")) return "standard";
-  if (line.includes("基本")) return "basic";
+  if (line.includes("ライト") || line.includes("基本")) return "light";
   return "none";
 }
 
@@ -24,7 +24,7 @@ async function countThisMonthRevisions(orderId: string): Promise<number> {
 }
 
 // brief.md から顧客情報を取得
-async function getBriefInfo(orderId: string): Promise<{ toEmail: string; contactName: string; projectName: string; plan: "none" | "basic" | "standard" | "premium" } | null> {
+async function getBriefInfo(orderId: string): Promise<{ toEmail: string; contactName: string; projectName: string; plan: "none" | "light" | "standard" | "premium" } | null> {
   if (!process.env.VERCEL_ENV) return null;
   try {
     const token = process.env.BLOB_READ_WRITE_TOKEN!;
@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
   const briefInfo = await getBriefInfo(orderId);
 
   // --- Step 2: 保守プランによる修正回数チェック（保存前に実施してBlobへの余分な書き込みを防ぐ） ---
-  if (briefInfo?.plan === "basic") {
+  if (briefInfo?.plan === "light") {
     try {
       const thisMonthCount = await countThisMonthRevisions(orderId);
       if (thisMonthCount >= 2) {

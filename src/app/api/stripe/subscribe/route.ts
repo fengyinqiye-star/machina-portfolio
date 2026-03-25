@@ -8,6 +8,26 @@ const PLAN_PRICES: Record<string, string> = {
   premium: "price_1TEViUBLGjf6t2zy22tOaKSs",   // 月額19,800円
 };
 
+// brief.md から顧客情報を取得（Stripe Customer Portal解約時のメール通知に使用）
+async function fetchBriefInfo(orderId: string): Promise<{ toEmail: string; contactName: string; projectName: string }> {
+  const token = process.env.BLOB_READ_WRITE_TOKEN;
+  if (!token) return { toEmail: "", contactName: "", projectName: "" };
+  try {
+    const { list } = await import("@vercel/blob");
+    const { blobs } = await list({ prefix: `orders/${orderId}/brief.md`, token });
+    if (blobs.length === 0) return { toEmail: "", contactName: "", projectName: "" };
+    const res = await fetch(blobs[0].url, { headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) return { toEmail: "", contactName: "", projectName: "" };
+    const text = await res.text();
+    const toEmail = text.match(/- メールアドレス: ([^\n]+)/)?.[1]?.trim() ?? "";
+    const contactName = text.match(/- お名前: ([^\n]+)/)?.[1]?.trim() ?? "";
+    const projectName = text.match(/^# 案件依頼: ([^\n]+)/m)?.[1]?.trim() ?? "";
+    return { toEmail, contactName, projectName };
+  } catch {
+    return { toEmail: "", contactName: "", projectName: "" };
+  }
+}
+
 export async function GET(request: NextRequest) {
   if (!stripe) {
     return NextResponse.json({ error: "Stripe未設定" }, { status: 503 });
@@ -29,6 +49,10 @@ export async function GET(request: NextRequest) {
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-company.dev";
 
+  // brief.md から顧客情報を取得してサブスクリプションメタデータに含める
+  // → Stripe Customer Portal で直接解約された場合も webhook でメール通知が可能になる
+  const { toEmail, contactName, projectName } = await fetchBriefInfo(orderId);
+
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
@@ -43,6 +67,9 @@ export async function GET(request: NextRequest) {
           orderId,
           plan,
           vercelProjectId,
+          toEmail,
+          contactName,
+          projectName,
         },
       },
       success_url: `${siteUrl}/thanks?order=${orderId}&maintenance=true`,

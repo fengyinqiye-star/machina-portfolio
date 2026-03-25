@@ -1,27 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { orderSchema, type OrderInput } from "@/lib/validators/order";
 import { FormField } from "@/components/molecules/FormField";
 import { Input } from "@/components/atoms/Input";
 import { Textarea } from "@/components/atoms/Textarea";
 import { Button } from "@/components/atoms/Button";
 
-export function ContactForm() {
+function ContactFormInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const refCode = searchParams.get("ref") ?? "";
   const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<OrderInput>({
     resolver: zodResolver(orderSchema),
-    defaultValues: { honeypot: "", maintenancePlan: "none", customDomain: "" },
+    defaultValues: { honeypot: "", maintenancePlan: "none", customDomain: "", referralCode: "" },
   });
+
+  useEffect(() => {
+    if (refCode) setValue("referralCode", refCode);
+  }, [refCode, setValue]);
 
   const selectedPlan = watch("maintenancePlan");
 
@@ -51,6 +58,8 @@ export function ContactForm() {
         className="absolute opacity-0 pointer-events-none"
         {...register("honeypot")}
       />
+      {/* 紹介コード（隠しフィールド） */}
+      <input type="hidden" {...register("referralCode")} />
 
       {/* Server error */}
       {serverError && (
@@ -123,8 +132,8 @@ export function ContactForm() {
               features: ["GitHubリポジトリ移管", "Vercel設定引き渡し", "30日間瑕疵対応"],
             },
             {
-              value: "basic",
-              label: "基本プラン",
+              value: "light",
+              label: "ライトプラン",
               price: "¥2,980 / 月",
               features: ["ホスティング継続", "SSL・セキュリティ維持", "軽微な修正 月2回まで"],
             },
@@ -206,5 +215,13 @@ export function ContactForm() {
         送信後、AIオーケストレーターが内容を分析し、ご入力のメールアドレスへご連絡いたします。
       </p>
     </form>
+  );
+}
+
+export function ContactForm() {
+  return (
+    <Suspense fallback={null}>
+      <ContactFormInner />
+    </Suspense>
   );
 }

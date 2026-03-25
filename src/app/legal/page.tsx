@@ -1,9 +1,15 @@
 import { NavBar } from "@/components/molecules/NavBar";
 
 export const metadata = {
-  title: "特定商取引法に基づく表記 | Machina",
-  description: "Machinaの特定商取引法に基づく表記",
+  title: "特定商取引法に基づく表記",
+  description: "Machinaの特定商取引法に基づく表記。販売事業者・連絡先・料金・キャンセルポリシー等の開示情報。",
   robots: { index: true, follow: true },
+  alternates: { canonical: "https://ai-company.dev/legal" },
+  openGraph: {
+    title: "特定商取引法に基づく表記 | Machina",
+    description: "Machinaの特定商取引法に基づく表記。販売事業者・連絡先・料金・キャンセルポリシー等の開示情報。",
+    url: "https://ai-company.dev/legal",
+  },
 };
 
 const CONTACT_EMAIL = "autocode.2603@gmail.com";

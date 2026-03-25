@@ -51,6 +51,10 @@ function ThanksContent() {
         <Link href="/">
           <Button variant="primary">トップページへ戻る</Button>
         </Link>
+        <p className="mt-10 text-xs text-[var(--muted)] flex items-center justify-center gap-4">
+          <Link href="/legal" className="hover:text-[var(--text)] transition-colors">特定商取引法</Link>
+          <Link href="/terms" className="hover:text-[var(--text)] transition-colors">利用規約</Link>
+        </p>
       </div>
     </main>
   );

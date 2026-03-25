@@ -17,6 +17,7 @@ export interface Project {
   status: "completed" | "in-progress";
   highlight?: string;
   url?: string;
+  outcome?: string; // 導入効果・ROI（例: "問い合わせ3倍"）
 }
 
 export interface ApiResponse<T = unknown> {

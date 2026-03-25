@@ -48,6 +48,7 @@ async function processEvent(event: { type: string; data: { object: unknown } }) 
         await put(`orders/${orderId}/payment-received.md`, content, {
           access: "private",
           contentType: "text/markdown",
+          allowOverwrite: true,
         });
         console.log(`[stripe/webhook] payment-received.md 保存完了: ${orderId}`);
         const { triggerWebhook } = await import("@/lib/triggerWebhook");

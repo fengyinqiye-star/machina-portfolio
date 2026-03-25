@@ -189,9 +189,9 @@ async function getOrderStatusFromBlob(orderId: string) {
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { orderId: string } }
+  { params }: { params: Promise<{ orderId: string }> }
 ) {
-  const { orderId } = params;
+  const { orderId } = await params;
 
   if (!orderId || !/^[a-zA-Z0-9_\-\.]{1,80}$/.test(orderId) || orderId.includes("..")) {
     return NextResponse.json({ error: "Invalid orderId" }, { status: 422 });

@@ -2,6 +2,7 @@
 
 import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
+import Link from "next/link";
 
 export default function GlobalError({
   error,
@@ -51,12 +52,12 @@ export default function GlobalError({
         >
           再試行する
         </button>
-        <a
+        <Link
           href="/"
           style={{ color: "#a8e63a", fontSize: "14px", textDecoration: "none" }}
         >
           トップに戻る
-        </a>
+        </Link>
       </body>
     </html>
   );
