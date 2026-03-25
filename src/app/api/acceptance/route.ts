@@ -26,10 +26,10 @@ export async function POST(request: NextRequest) {
   };
 
   if (!orderId) {
-    return NextResponse.json({ success: false, error: "Missing orderId" }, { status: 422 });
+    return NextResponse.json({ success: false, error: "案件IDが指定されていません" }, { status: 422 });
   }
   if (!isValidOrderId(orderId)) {
-    return NextResponse.json({ success: false, error: "Invalid orderId" }, { status: 422 });
+    return NextResponse.json({ success: false, error: "無効な案件IDです" }, { status: 422 });
   }
 
   // orderId の存在確認（なりすまし防止）
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       const token = process.env.BLOB_READ_WRITE_TOKEN!;
       const briefResult = await list({ prefix: `orders/${orderId}/brief.md`, token });
       if (briefResult.blobs.length === 0) {
-        return NextResponse.json({ success: false, error: "Order not found" }, { status: 404 });
+        return NextResponse.json({ success: false, error: "案件が見つかりません" }, { status: 404 });
       }
     } catch {
       // チェック失敗時は通す

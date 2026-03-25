@@ -43,8 +43,12 @@ function ContactFormInner() {
     if (res.ok) {
       router.push("/thanks");
     } else {
-      const json = await res.json();
-      setServerError(json.error ?? "送信に失敗しました。もう一度お試しください。");
+      try {
+        const json = await res.json();
+        setServerError(json.error ?? "送信に失敗しました。もう一度お試しください。");
+      } catch {
+        setServerError("送信に失敗しました。もう一度お試しください。");
+      }
     }
   };
 

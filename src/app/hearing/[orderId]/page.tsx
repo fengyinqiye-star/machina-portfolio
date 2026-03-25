@@ -14,6 +14,7 @@ function HearingContent() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [round, setRound] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -38,7 +39,7 @@ function HearingContent() {
         }
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => { setLoadError(true); setLoading(false); });
   }, [orderId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -94,6 +95,15 @@ function HearingContent() {
 
         {loading ? (
           <p style={styles.muted}>質問を読み込み中...</p>
+        ) : loadError ? (
+          <div>
+            <p style={{ color: "#f56042", fontSize: 14, marginBottom: 16 }}>
+              質問の読み込みに失敗しました。ページを再読み込みしてください。
+            </p>
+            <button onClick={() => window.location.reload()} style={{ ...styles.button, background: "#333", color: "#e8e5df" }}>
+              再読み込み
+            </button>
+          </div>
         ) : (
           <form onSubmit={handleSubmit}>
             {questions.map(q => (
