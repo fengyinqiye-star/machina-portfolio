@@ -23,7 +23,7 @@ async function notifyWebhook(orderId: string, event: string, note?: string) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-webhook-secret": webhookSecret,
+      "Authorization": `Bearer ${webhookSecret}`,
     },
     body: JSON.stringify({ orderId, event, note }),
   });
