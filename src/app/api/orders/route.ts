@@ -90,22 +90,28 @@ ${referralCode && referralCode.length > 0 ? referralCode : "なし"}
     );
   }
 
-  // 受注確認メール送信（非同期、失敗しても続行）
+  // 受注確認メール送信（失敗時はRedisキューに積んでcheck-new-ordersがリトライ）
   sendOrderConfirmation({
     to: data.contactEmail,
     contactName: data.contactName,
     projectName: data.projectName,
     orderId,
-  }).catch((err) => console.error("[api/orders] 受注確認メール送信失敗:", err));
+  }).catch(async (err) => {
+    console.error("[api/orders] 受注確認メール送信失敗:", err);
+    // Redisキューに積んで後でリトライ
+    try {
+      await triggerWebhook(orderId, "email.confirmation_failed");
+    } catch {}
+  });
 
-  // 運営への通知メール
+  // 運営への通知メール（失敗時はエラーログ記録）
   sendOwnerNotification({
     contactName: data.contactName,
     contactEmail: data.contactEmail,
     projectName: data.projectName,
     overview: data.overview,
     orderId,
-  }).catch((err) => console.error("[api/orders] 運営通知メール送信失敗:", err));
+  }).catch((err) => console.error("[api/orders] 運営通知メール送信失敗 orderId=" + orderId + ":", err));
 
   // Webhookサーバーに即時通知（未設定時はcronがフォールバック）
   triggerWebhook(orderId, "order.new").catch(() => {});

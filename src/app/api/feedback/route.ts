@@ -124,6 +124,11 @@ export async function POST(request: NextRequest) {
   // --- Step 1: brief.md から顧客情報・プランを取得（保存前にプラン制限チェック） ---
   const briefInfo = await getBriefInfo(orderId);
 
+  // Vercel本番環境でbrief.mdが存在しない = 無効なorderId（不正投稿防止）
+  if (process.env.VERCEL_ENV && briefInfo === null) {
+    return NextResponse.json({ success: false, error: "案件が見つかりません。" }, { status: 404 });
+  }
+
   // --- Step 2: 保守プランによる修正回数チェック（保存前に実施してBlobへの余分な書き込みを防ぐ） ---
   if (briefInfo?.plan === "light") {
     try {

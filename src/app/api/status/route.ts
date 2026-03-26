@@ -76,7 +76,8 @@ function getAgentSteps(orderId: string) {
 function getOrderStatus(orderId: string): "completed" | "processing" | "failed" | "pending" {
   if (fs.existsSync(path.join(DELIVERABLES_DIR, orderId))) return "completed";
   if (fs.existsSync(path.join(ORDERS_DIR, orderId, ".failed"))) return "failed";
-  if (fs.existsSync(path.join(ORDERS_DIR, orderId, ".processing"))) return "processing";
+  // trigger-order.sh は mkdir でアトミックロックを使用（.processing.lock ディレクトリ）
+  if (fs.existsSync(path.join(ORDERS_DIR, orderId, ".processing.lock"))) return "processing";
   return "pending";
 }
 
@@ -91,7 +92,7 @@ function getOrdersLocal() {
       const contactName = brief.match(/- お名前: (.+)/m)?.[1] ?? "不明";
       const status = getOrderStatus(id);
       const { steps, currentLabel } = getAgentSteps(id);
-      const processingPath = path.join(ORDERS_DIR, id, ".processing");
+      const processingPath = path.join(ORDERS_DIR, id, ".processing.lock");
       const elapsedSec = status === "processing" && fs.existsSync(processingPath)
         ? Math.floor((Date.now() - fs.statSync(processingPath).mtimeMs) / 1000)
         : null;

@@ -27,7 +27,11 @@ export async function triggerWebhook(orderId: string, event: string = "order.new
   // --- 2. Upstash Redisキューに保存（PCオフライン時のフォールバック） ---
   const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
   const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!redisUrl || !redisToken) return;
+  if (!redisUrl || !redisToken) {
+    // Redisが未設定でも check-new-orders.sh が Blob から定期スキャンするため消失リスクは低い
+    console.warn(`[triggerWebhook] WARN: Upstash Redis未設定 — orderId=${orderId} はBlobスキャンで回収される`);
+    return;
+  }
 
   try {
     const payload = JSON.stringify({ orderId, event, queuedAt: new Date().toISOString() });
@@ -36,7 +40,8 @@ export async function triggerWebhook(orderId: string, event: string = "order.new
       headers: { Authorization: `Bearer ${redisToken}` },
       signal: AbortSignal.timeout(5000),
     });
-  } catch {
-    // Redisへの保存失敗はサイレントに無視（cronが5分後に回収）
+  } catch (err) {
+    // Redisへの保存失敗: Vercelログに記録（check-new-orders.sh の Blob定期スキャンがフォールバック）
+    console.error(`[triggerWebhook] ERROR: Redisキュー保存失敗 — orderId=${orderId} event=${event}`, err);
   }
 }
