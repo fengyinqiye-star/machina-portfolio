@@ -99,16 +99,26 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, error: "無効な案件IDです。" }, { status: 422 });
   }
 
-  // Blobの既存revision数を数えて次番号を決定（クライアント送信値は使わない）
+  // 既存revision数を数えて次番号を決定（クライアント送信値は使わない）
   let rev = 1;
   let existingRevCount = 0;
   try {
-    const token = process.env.BLOB_READ_WRITE_TOKEN!;
-    const existing = await list({ prefix: `orders/${orderId}/revision-`, token });
-    existingRevCount = existing.blobs.length;
+    if (process.env.VERCEL_ENV) {
+      const token = process.env.BLOB_READ_WRITE_TOKEN!;
+      const existing = await list({ prefix: `orders/${orderId}/revision-`, token });
+      existingRevCount = existing.blobs.length;
+    } else {
+      // ローカル環境: ファイルシステムから既存数をカウント
+      const { default: fs } = await import("fs");
+      const { default: path } = await import("path");
+      const dir = path.join(process.cwd(), "..", "..", "orders", orderId);
+      if (fs.existsSync(dir)) {
+        existingRevCount = fs.readdirSync(dir).filter(f => /^revision-\d+\.md$/.test(f)).length;
+      }
+    }
     rev = existingRevCount + 1;
   } catch {
-    // Blob取得失敗時はフォールバック（保存は続行）
+    // 取得失敗時はフォールバック（保存は続行）
   }
 
   // --- Step 1: brief.md から顧客情報・プランを取得（保存前にプラン制限チェック） ---

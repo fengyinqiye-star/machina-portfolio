@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 
 type Order = {
   orderId: string;
@@ -109,12 +110,20 @@ export default function AdminPage() {
             <p className="text-[#a8e63a] text-xs tracking-[0.25em] uppercase font-mono mb-2">Machina / Admin</p>
             <h1 className="text-2xl font-bold">案件ダッシュボード</h1>
           </div>
-          <button
-            onClick={() => loadOrders(password)}
-            className="text-xs font-mono text-[#555250] hover:text-[#a8e63a] transition-colors border border-[#1E1E1C] px-3 py-1.5"
-          >
-            更新
-          </button>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/admin/revenue"
+              className="text-xs font-mono text-[#555250] hover:text-[#a8e63a] transition-colors border border-[#1E1E1C] px-3 py-1.5"
+            >
+              収益ダッシュボード →
+            </Link>
+            <button
+              onClick={() => loadOrders(password)}
+              className="text-xs font-mono text-[#555250] hover:text-[#a8e63a] transition-colors border border-[#1E1E1C] px-3 py-1.5"
+            >
+              更新
+            </button>
+          </div>
         </div>
 
         {/* サマリー */}
