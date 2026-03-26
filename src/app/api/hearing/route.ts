@@ -62,7 +62,7 @@ ${Object.entries(answers).map(([k, v]) => `## ${k}\n${v || "（未回答）"}`).
   }
 
   // Webhookサーバーに即時通知
-  triggerWebhook(orderId, "hearing.answered").catch(() => {});
+  await triggerWebhook(orderId, "hearing.answered").catch(() => {});
 
   return NextResponse.json({ success: true });
 }

@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
       const thisMonthCount = await countThisMonthRevisions(orderId);
       if (thisMonthCount >= 2) {
         if (briefInfo.toEmail) {
-          sendUpgradeMail(briefInfo.toEmail, briefInfo.contactName, briefInfo.projectName).catch(() => {});
+          await sendUpgradeMail(briefInfo.toEmail, briefInfo.contactName, briefInfo.projectName).catch(() => {});
         }
         return NextResponse.json(
           {
@@ -205,7 +205,7 @@ ${feedback}
   // --- Step 5: Webhookサーバーに修正依頼トリガーを送信 ---
   try {
     const { triggerWebhook } = await import("@/lib/triggerWebhook");
-    triggerWebhook(orderId, "revision.received").catch(() => {});
+    await triggerWebhook(orderId, "revision.received").catch(() => {});
   } catch {
     // webhook失敗は無視（保存済みなのでcheck-new-ordersが拾う）
   }
