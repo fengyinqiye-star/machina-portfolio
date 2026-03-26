@@ -17,4 +17,10 @@ export class LocalAdapter implements StorageAdapter {
     await fs.writeFile(filePath, content, "utf-8");
     return { path: filePath };
   }
+
+  async saveFile(orderId: string, filename: string, content: string): Promise<void> {
+    const dir = path.join(this.ordersDir, orderId);
+    await fs.mkdir(dir, { recursive: true });
+    await fs.writeFile(path.join(dir, filename), content, "utf-8");
+  }
 }

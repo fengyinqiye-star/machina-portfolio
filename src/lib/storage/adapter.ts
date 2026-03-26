@@ -1,5 +1,6 @@
 export interface StorageAdapter {
   saveOrder(orderId: string, content: string): Promise<{ url?: string; path?: string }>;
+  saveFile(orderId: string, filename: string, content: string): Promise<void>;
 }
 
 export async function getStorageAdapter(): Promise<StorageAdapter> {

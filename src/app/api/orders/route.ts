@@ -91,12 +91,18 @@ ${referralCode && referralCode.length > 0 ? referralCode : "なし"}
   }
 
   // 受注確認メール・運営通知・Webhookを並列実行（失敗してもレスポンスには影響しない）
+  const adapterForFlag = await getStorageAdapter();
   await Promise.allSettled([
     sendOrderConfirmation({
       to: data.contactEmail,
       contactName: data.contactName,
       projectName: data.projectName,
       orderId,
+    }).then(async () => {
+      // 送信成功 → Blobにセンチネルを保存（check-new-ordersの再送防止用）
+      try {
+        await adapterForFlag.saveFile(orderId, ".confirmation-email-sent", new Date().toISOString());
+      } catch {}
     }).catch(async (err) => {
       console.error("[api/orders] 受注確認メール送信失敗:", err);
       try { await triggerWebhook(orderId, "email.confirmation_failed"); } catch {}
