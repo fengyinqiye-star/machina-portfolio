@@ -52,7 +52,7 @@ async function processEvent(event: { type: string; data: { object: unknown } }) 
         });
         console.log(`[stripe/webhook] payment-received.md 保存完了: ${orderId}`);
         const { triggerWebhook } = await import("@/lib/triggerWebhook");
-        triggerWebhook(orderId, "payment.received").catch(() => {});
+        await triggerWebhook(orderId, "payment.received");
       } catch (err) {
         console.error("[stripe/webhook] Blob書き込み失敗:", err);
       }
@@ -75,7 +75,7 @@ async function processEvent(event: { type: string; data: { object: unknown } }) 
       console.log(`[stripe/webhook] セッション期限切れ: ${orderId} — 再発行通知`);
       try {
         const { triggerWebhook } = await import("@/lib/triggerWebhook");
-        triggerWebhook(orderId, "payment.link_expired").catch(() => {});
+        await triggerWebhook(orderId, "payment.link_expired");
       } catch (err) {
         console.error("[stripe/webhook] 期限切れ通知失敗:", err);
       }
