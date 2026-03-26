@@ -2,9 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 
 function verifyToken(orderId: string, token: string): boolean {
-  const secret = process.env.WEBHOOK_SECRET || "machina-secret";
-  const expected = crypto.createHmac("sha256", secret).update(orderId).digest("hex");
-  return crypto.timingSafeEqual(Buffer.from(token, "hex"), Buffer.from(expected, "hex"));
+  try {
+    const secret = process.env.WEBHOOK_SECRET || "machina-secret";
+    const expected = crypto.createHmac("sha256", secret).update(orderId).digest("hex");
+    const tokenBuf = Buffer.from(token, "hex");
+    const expectedBuf = Buffer.from(expected, "hex");
+    if (tokenBuf.length !== expectedBuf.length) return false;
+    return crypto.timingSafeEqual(tokenBuf, expectedBuf);
+  } catch {
+    return false;
+  }
 }
 
 async function notifyWebhook(orderId: string, event: string, note?: string) {
