@@ -145,7 +145,7 @@ function ContactFormInner() {
               value: "standard",
               label: "スタンダード",
               price: "¥4,980 / 月",
-              features: ["基本プランすべて", "修正依頼 無制限", "月次レポート"],
+              features: ["基本プランすべて", "修正依頼 無制限", "機能追加（小規模）", "優先対応", "月次レポート"],
             },
             {
               value: "premium",

@@ -112,10 +112,16 @@ export default function AdminPage() {
           </div>
           <div className="flex items-center gap-3">
             <Link
+              href="/admin/analytics"
+              className="text-xs font-mono text-[#555250] hover:text-[#a8e63a] transition-colors border border-[#1E1E1C] px-3 py-1.5"
+            >
+              運用分析 →
+            </Link>
+            <Link
               href="/admin/revenue"
               className="text-xs font-mono text-[#555250] hover:text-[#a8e63a] transition-colors border border-[#1E1E1C] px-3 py-1.5"
             >
-              収益ダッシュボード →
+              収益 →
             </Link>
             <button
               onClick={() => loadOrders(password)}

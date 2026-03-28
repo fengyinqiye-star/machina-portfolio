@@ -70,7 +70,7 @@ function HearingContent() {
           <h1 style={styles.title}>ご回答ありがとうございます</h1>
           <p style={styles.muted}>
             内容を確認し、追加でお聞きすることがあれば改めてご連絡します。<br />
-            問題なければそのまま開発を開始します。
+            ヒアリング完了後、お見積もりとお支払いリンクをメールでお送りします。
           </p>
         </div>
       </div>

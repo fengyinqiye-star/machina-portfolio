@@ -46,13 +46,13 @@ export function HeroSection() {
         <p className="text-base md:text-lg text-[var(--muted)] max-w-xl mb-6 leading-relaxed">
           要件定義・設計・実装・テスト・デプロイ——
           <br />
-          13のAIエージェントが24時間以内に動くものを届けます。
+          16のAIエージェントが受注から納品まで全自動で動きます。
         </p>
 
         {/* Social proof */}
         <p className="text-sm text-[var(--muted)] mb-10">
           <span style={{ color: "var(--accent)" }} className="font-bold">実績{projectCount}件・問い合わせ平均+190%</span>
-          　|　納品後30日間無償サポート
+          　|　検収後30日間の瑕疵担保付き
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4">
@@ -77,8 +77,8 @@ export function HeroSection() {
         {/* Stats */}
         <div className="mt-24 pt-8 border-t border-[var(--border)] grid grid-cols-3 gap-8 max-w-sm">
           <div>
-            <div className="text-3xl font-bold tabular-nums text-[var(--text)]">24h</div>
-            <div className="text-xs text-[var(--muted)] mt-1 tracking-wide">平均納品時間</div>
+            <div className="text-3xl font-bold tabular-nums text-[var(--text)]">2〜5日</div>
+            <div className="text-xs text-[var(--muted)] mt-1 tracking-wide">LP平均納品日数</div>
           </div>
           <div>
             <div className="text-3xl font-bold tabular-nums text-[var(--text)]">100%</div>

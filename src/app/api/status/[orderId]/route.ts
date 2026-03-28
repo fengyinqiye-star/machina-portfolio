@@ -61,6 +61,13 @@ function getOrderStatusLocal(orderId: string) {
   const isProcessing  = fs.existsSync(path.join(orderDir, ".processing"));
   const isAwaiting    = fs.existsSync(path.join(orderDir, ".awaiting-payment"));
 
+  // 未完了の修正依頼チェック
+  const revisionFiles = fs.readdirSync(orderDir).filter(f => /^revision-\d{3}\.md$/.test(f));
+  const hasPendingRevision = revisionFiles.some(f => {
+    const num = f.replace("revision-", "").replace(".md", "");
+    return !fs.existsSync(path.join(orderDir, `.revision-${num}-done`));
+  });
+
   let deployUrl = "";
   if (hasDeliverables) {
     const readme = path.join(deliverablesDir, "README.md");
@@ -83,17 +90,23 @@ function getOrderStatusLocal(orderId: string) {
                                                                               done: hasReview || hasDeliverables, active: hasTests && !hasDeliverables },
     { label: "納品",         sublabel: hasDeliverables ? "納品完了！" : "デプロイ・納品準備",
                                                                               done: hasDeliverables, active: hasReview && !hasDeliverables },
+    ...(hasDeliverables && revisionFiles.length > 0 ? [{
+      label: "修正対応",     sublabel: hasPendingRevision ? (isProcessing ? "修正作業中" : "修正依頼受付済み") : "修正対応完了",
+                                                                              done: !hasPendingRevision, active: hasPendingRevision,
+    }] : []),
   ];
 
   const currentPhaseIndex = phases.reduce((acc, p, i) => (p.done ? i : acc), 0);
   const progressPercent = Math.round((currentPhaseIndex / (phases.length - 1)) * 100);
 
   let statusLabel = "受付済み";
-  if (hasFailed)           statusLabel = "エラー停止";
-  else if (hasDeliverables) statusLabel = "納品完了";
-  else if (isProcessing)   statusLabel = "開発中";
-  else if (isAwaiting)     statusLabel = "お支払い待ち";
-  else if (hasSales)       statusLabel = "見積完了";
+  if (hasFailed)                              statusLabel = "エラー停止";
+  else if (hasDeliverables && hasPendingRevision && isProcessing) statusLabel = "修正対応中";
+  else if (hasDeliverables && hasPendingRevision) statusLabel = "修正依頼受付済み";
+  else if (hasDeliverables)                   statusLabel = "納品完了";
+  else if (isProcessing)                      statusLabel = "開発中";
+  else if (isAwaiting)                        statusLabel = "お支払い待ち";
+  else if (hasSales)                          statusLabel = "見積完了";
 
   return { orderId, projectName, statusLabel, progressPercent, phases, deployUrl, hasFailed, updatedAt: new Date().toISOString() };
 }
@@ -159,10 +172,11 @@ async function getOrderStatusFromBlob(orderId: string) {
   // フェーズ表示（Blob環境では簡易版）
   const phaseMap: Record<string, number> = {
     reception: 0, sales: 1, payment: 2, requirements: 3,
-    design: 4, development: 5, qa: 6, delivery: 7,
+    design: 4, development: 5, qa: 6, delivery: 7, revision: 8,
   };
   const currentIdx = phaseMap[currentPhase] ?? 0;
 
+  const isRevisionPhase = currentPhase === "revision";
   const phaseLabels = [
     { label: "受注",           sublabel: "ご依頼を受け付けました" },
     { label: "見積もり",       sublabel: "要件分析・お見積もり" },
@@ -171,7 +185,8 @@ async function getOrderStatusFromBlob(orderId: string) {
     { label: "設計",           sublabel: "システム設計・アーキテクチャ策定" },
     { label: "実装",           sublabel: "コーディング中" },
     { label: "テスト・レビュー", sublabel: "品質確認" },
-    { label: "納品",           sublabel: statusLabel.includes("納品完了") ? "納品完了！" : "デプロイ・納品準備" },
+    { label: "納品",           sublabel: statusLabel.includes("納品完了") || isRevisionPhase ? "納品完了！" : "デプロイ・納品準備" },
+    ...(isRevisionPhase ? [{ label: "修正対応", sublabel: statusLabel.includes("修正対応中") ? "修正作業中" : "修正対応完了" }] : []),
   ];
 
   const phases = phaseLabels.map((p, i) => ({

@@ -86,7 +86,7 @@ export default function CancelPage() {
             </div>
 
             <p className="text-xs text-[var(--muted)] leading-relaxed">
-              「解約する」を押すと即座に解約が完了します。
+              「解約する」を押すと解約手続きが完了します。解約後14日間はサービスを継続してご利用いただけます。
               返金は元のお支払い方法へ3〜5営業日で反映されます。
               解約後もGitHubのソースコードは引き続きご利用いただけます。
             </p>

@@ -38,13 +38,36 @@ function ThanksContent() {
           </>
         ) : (
           <>
-            <p className="text-[var(--muted)] mb-2 leading-relaxed">
+            <p className="text-[var(--muted)] mb-8 leading-relaxed">
               案件のご依頼ありがとうございます。
             </p>
-            <p className="text-[var(--muted)] mb-10 leading-relaxed">
-              AIオーケストレーターが内容を分析し、
-              担当エージェントチームが順次対応を開始します。
-              ご入力いただいたメールアドレスへご連絡いたします。
+
+            {/* 次のステップ */}
+            <div className="text-left mb-10 space-y-4">
+              {[
+                { step: "1", title: "見積もりメールをお送りします", desc: "通常5〜10分以内にご登録のメールアドレスへ、ヒアリング内容・金額・支払いリンクをお送りします。" },
+                { step: "2", title: "お支払いで開発スタート", desc: "メール内の「お支払いはこちら」からStripe決済。確認後すぐにAIエージェントチームが開発を開始します。" },
+                { step: "3", title: "進捗を随時メールでお知らせ", desc: "要件定義・実装・テスト・納品の各フェーズ完了時に自動でご連絡します。通常24〜48時間で納品完了。" },
+              ].map(({ step, title, desc }) => (
+                <div key={step} className="flex gap-4 p-4 border border-[var(--border)]">
+                  <span
+                    className="flex-shrink-0 w-7 h-7 flex items-center justify-center text-xs font-bold"
+                    style={{ background: "var(--accent)", color: "#111" }}
+                  >
+                    {step}
+                  </span>
+                  <div>
+                    <p className="font-semibold text-[var(--text)] text-sm mb-1">{title}</p>
+                    <p className="text-xs text-[var(--muted)] leading-relaxed">{desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <p className="text-xs text-[var(--muted)] mb-8 leading-relaxed">
+              メールが届かない場合は迷惑メールフォルダをご確認いただくか、
+              <a href="https://ai-company.dev" className="underline hover:text-[var(--text)] transition-colors">サイト</a>
+              よりお問い合わせください。
             </p>
           </>
         )}

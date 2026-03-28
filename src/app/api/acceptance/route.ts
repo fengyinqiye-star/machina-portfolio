@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put, list } from "@vercel/blob";
 import { checkRateLimit, isValidOrderId } from "@/lib/rateLimit";
+import { triggerWebhook } from "@/lib/triggerWebhook";
 
 export async function POST(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
@@ -73,6 +74,11 @@ export async function POST(request: NextRequest) {
     console.error("Acceptance save error:", err);
     return NextResponse.json({ success: false, error: "保存に失敗しました" }, { status: 500 });
   }
+
+  // 検収完了をエージェントに通知（保守プラン案内等のトリガー）
+  await triggerWebhook(orderId, "acceptance.completed").catch((e) =>
+    console.error("acceptance webhook error:", e)
+  );
 
   return NextResponse.json({ success: true });
 }

@@ -1,11 +1,13 @@
 const WORKFLOW_STEPS = [
   { num: "01", label: "受注", desc: "フォームから案件依頼を受付" },
-  { num: "02", label: "要件定義", desc: "PMエージェントが要件を整理" },
-  { num: "03", label: "設計", desc: "Architectが設計書を作成" },
-  { num: "04", label: "実装", desc: "FE/BE/Infraを並列実装" },
-  { num: "05", label: "テスト", desc: "QAエージェントが品質検証" },
-  { num: "06", label: "レビュー", desc: "セキュリティ・品質チェック" },
-  { num: "07", label: "納品", desc: "Vercelデプロイ可能な状態で納品" },
+  { num: "02", label: "ヒアリング", desc: "Salesエージェントが詳細をヒアリング" },
+  { num: "03", label: "お支払い", desc: "見積もり確認後、Stripeで決済" },
+  { num: "04", label: "要件定義", desc: "PMエージェントが要件を整理" },
+  { num: "05", label: "設計", desc: "Architectが設計書を作成" },
+  { num: "06", label: "実装", desc: "FE/BE/Infraを並列実装" },
+  { num: "07", label: "テスト", desc: "QAエージェントが品質検証" },
+  { num: "08", label: "レビュー", desc: "セキュリティ・品質チェック" },
+  { num: "09", label: "納品", desc: "Vercelデプロイ可能な状態で納品" },
 ];
 
 const FEATURED_WORKS = [
@@ -52,7 +54,7 @@ export function ServicesSection() {
             Machinaの仕組み
           </h2>
           <p className="text-[var(--muted)] max-w-lg leading-relaxed">
-            11の専門AIサブエージェントが協調し、人間のソフトウェア開発会社と同じワークフローを全自動で実行します。
+            16の専門AIサブエージェントが協調し、人間のソフトウェア開発会社と同じワークフローを全自動で実行します。
 
           </p>
         </div>
