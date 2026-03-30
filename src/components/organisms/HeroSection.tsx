@@ -75,14 +75,20 @@ export function HeroSection() {
         </div>
 
         {/* Stats */}
-        <div className="mt-24 pt-8 border-t border-[var(--border)] grid grid-cols-3 gap-8 max-w-sm">
+        <div className="mt-24 pt-8 border-t border-[var(--border)] grid grid-cols-2 sm:grid-cols-4 gap-8">
           <div>
             <div className="text-3xl font-bold tabular-nums text-[var(--text)]">2〜5日</div>
             <div className="text-xs text-[var(--muted)] mt-1 tracking-wide">LP平均納品日数</div>
           </div>
           <div>
-            <div className="text-3xl font-bold tabular-nums text-[var(--text)]">100%</div>
-            <div className="text-xs text-[var(--muted)] mt-1 tracking-wide">自動化</div>
+            <div className="text-3xl font-bold tabular-nums text-[var(--text)]">24h/365日</div>
+            <div className="text-xs text-[var(--muted)] mt-1 tracking-wide">AIが自動稼働</div>
+          </div>
+          <div>
+            <div className="text-3xl font-bold tabular-nums" style={{ color: "var(--accent)" }}>
+              90+
+            </div>
+            <div className="text-xs text-[var(--muted)] mt-1 tracking-wide">Lighthouse全項目保証</div>
           </div>
           <div>
             <div className="text-3xl font-bold tabular-nums" style={{ color: "var(--accent)" }}>

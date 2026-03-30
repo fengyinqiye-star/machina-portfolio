@@ -1,6 +1,7 @@
 import { NavBar } from "@/components/molecules/NavBar";
 import { HeroSection } from "@/components/organisms/HeroSection";
 import { ServicesSection } from "@/components/organisms/ServicesSection";
+import { AgentsSection } from "@/components/organisms/AgentsSection";
 import { ProjectsSection } from "@/components/organisms/ProjectsSection";
 import { ContactForm } from "@/components/organisms/ContactForm";
 
@@ -26,6 +27,7 @@ export default function HomePage() {
       <main>
         <HeroSection />
         <ServicesSection />
+        <AgentsSection />
         <ProjectsSection />
         <section id="contact" className="py-32 px-6 bg-[var(--bg-2)]">
           <div className="max-w-2xl mx-auto">
