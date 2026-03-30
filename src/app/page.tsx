@@ -7,8 +7,7 @@ import { ProjectsSection } from "@/components/organisms/ProjectsSection";
 
 // zod + react-hook-form (~250KB) を初期バンドルから切り離す
 const ContactForm = dynamic(
-  () => import("@/components/organisms/ContactForm").then((m) => ({ default: m.ContactForm })),
-  { ssr: false }
+  () => import("@/components/organisms/ContactForm").then((m) => ({ default: m.ContactForm }))
 );
 
 const jsonLd = {
