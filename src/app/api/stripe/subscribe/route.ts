@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 
-// 保守プランの価格ID（Stripeダッシュボードで作成済み）
+// 保守プランの価格ID（月額3,000円 固定）
 const PLAN_PRICES: Record<string, string> = {
-  light: "price_1TEViUBLGjf6t2zy7fGFcp8i",     // 月額2,980円
-  standard: "price_1TEViUBLGjf6t2zypbePDQIW",  // 月額4,980円
-  premium: "price_1TEViUBLGjf6t2zy22tOaKSs",   // 月額19,800円
+  light: "price_1TGexwBLGjf6t2zyQnFid79H",  // 月額3,000円
 };
 
 // brief.md から顧客情報を取得（Stripe Customer Portal解約時のメール通知に使用）

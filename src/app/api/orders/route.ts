@@ -70,10 +70,8 @@ ${data.techRequirements ?? "特に指定なし"}
 ${data.customDomain && data.customDomain.length > 0 ? data.customDomain : "なし（Vercel URL で納品）"}
 
 ## 保守プラン
-${data.maintenancePlan === "light" ? "ライトプラン（月額 ¥2,980）— ホスティング・SSL・軽微なバグ修正（月2回まで）" :
-  data.maintenancePlan === "standard" ? "スタンダードプラン（月額 ¥4,980）— 基本 + セキュリティアップデート・修正無制限" :
-  data.maintenancePlan === "premium" ? "プレミアムプラン（月額 ¥19,800）— スタンダード + 優先対応・機能追加対応" :
-  "なし（一括払い・コード移管）"}
+${data.maintenancePlan === "light" ? "保守プラン（月額 ¥3,000）— ホスティング・修正対応（月2回）・稼働監視" :
+  "なし（自分で管理・GitHubとVercelを移管）"}
 
 ## 紹介コード
 ${referralCode && referralCode.length > 0 ? referralCode : "なし"}

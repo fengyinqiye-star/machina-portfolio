@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "料金プラン",
-  description: "Machinaの開発費用・保守プランの料金一覧。LP制作1万円、Webアプリ3万円、大規模システム5万円の固定価格。受注から納品まで全自動のAI開発サービス。",
+  description: "Machinaの開発費用・保守プランの料金一覧。LP制作1万円、Webアプリ3万円、大規模5万円の固定価格。保守プランは月3,000円のみ。受注から納品まで全自動のAI開発サービス。",
   alternates: { canonical: "https://ai-company.dev/pricing" },
   openGraph: {
     title: "料金プラン | Machina",
@@ -69,41 +69,16 @@ const DEV_PLANS: DevPlan[] = [
 
 const MAINTENANCE_PLANS = [
   {
-    name: "ライトプラン",
-    price: "2,980円",
+    name: "保守プラン",
+    price: "3,000円",
     unit: "月",
-    features: [
-      "Vercelホスティング維持",
-      "軽微なテキスト・画像修正（月2回まで）",
-      "稼働監視",
-      "月次レポート",
-    ],
-  },
-  {
-    name: "スタンダードプラン",
-    price: "4,980円",
-    unit: "月",
-    features: [
-      "Vercelホスティング維持",
-      "修正対応（回数無制限）",
-      "機能追加（小規模）",
-      "稼働監視",
-      "月次レポート",
-      "優先対応",
-    ],
     highlight: true,
-  },
-  {
-    name: "プレミアムプラン",
-    price: "19,800円",
-    unit: "月",
     features: [
       "Vercelホスティング維持",
-      "修正・機能追加（無制限）",
-      "専任AIエージェント対応",
-      "稼働監視・障害即時対応",
+      "修正対応（月2回まで）",
+      "稼働監視・障害対応",
       "月次レポート",
-      "最優先対応",
+      "翌月からいつでも解約可",
     ],
   },
 ];

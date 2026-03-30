@@ -137,7 +137,7 @@ function ContactFormInner() {
             {
               value: "light",
               label: "Machinaにお任せ",
-              desc: "月額2,980円〜。ホスティング・修正対応・監視をすべて代行。詳細は納品後ご案内します。",
+              desc: "月額3,000円。ホスティング・修正対応（月2回）・監視をすべて代行。翌月からいつでも解約可。",
             },
           ].map(({ value, label, desc }) => {
             const checked = selectedPlan === value;

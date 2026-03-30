@@ -14,21 +14,15 @@ type SubscriptionInfo = {
 };
 
 const PLAN_LABELS: Record<string, string> = {
-  light: "ライト",
-  standard: "スタンダード",
-  premium: "プレミアム",
+  light: "保守プラン",
 };
 
 const PLAN_PRICES: Record<string, string> = {
-  light: "¥2,980 / 月",
-  standard: "¥4,980 / 月",
-  premium: "¥19,800 / 月",
+  light: "¥3,000 / 月",
 };
 
 const PLAN_FEATURES: Record<string, string[]> = {
-  light: ["月2回までの軽微な修正", "バグ修正対応", "メールサポート（3営業日以内）"],
-  standard: ["修正対応（回数無制限）", "バグ修正・機能追加（軽微）", "優先メールサポート（1営業日以内）", "月次レポート"],
-  premium: ["修正・機能追加（無制限）", "機能追加・デザイン変更", "専任AIエージェント対応（即日）", "月次改善提案レポート", "アクセス解析レポート"],
+  light: ["Vercelホスティング維持", "修正対応（月2回まで）", "稼働監視・障害対応", "月次レポート", "翌月からいつでも解約可"],
 };
 
 function SubscriptionContent() {
@@ -120,33 +114,25 @@ function SubscriptionContent() {
               継続的なサポート・修正対応が必要な場合はプランをご検討ください。
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-[#1E1E1C] mb-8">
-              {(["light", "standard", "premium"] as const).map((plan) => (
-                <div key={plan} className="bg-[#0D0D0D] p-5 flex flex-col">
-                  <p className="text-xs tracking-widest uppercase font-mono mb-2" style={{ color: "#a8e63a" }}>
-                    {PLAN_LABELS[plan]}
-                  </p>
-                  <p className="text-lg font-bold mb-3">{PLAN_PRICES[plan]}</p>
-                  <ul className="space-y-1 mb-4 flex-1">
-                    {PLAN_FEATURES[plan].map((f) => (
-                      <li key={f} className="text-xs text-[#555250] flex items-start gap-1.5">
-                        <span className="text-[#a8e63a] mt-0.5">·</span> {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <a
-                    href={`/api/stripe/subscribe?orderId=${encodeURIComponent(orderId)}&plan=${plan}`}
-                    className="text-center text-xs font-mono py-2 border transition-colors"
-                    style={
-                      plan === "standard"
-                        ? { borderColor: "#a8e63a", color: "#a8e63a" }
-                        : { borderColor: "#333", color: "#888" }
-                    }
-                  >
-                    このプランを選ぶ
-                  </a>
-                </div>
-              ))}
+            <div className="border border-[#1E1E1C] p-6 mb-8">
+              <p className="text-xs tracking-widest uppercase font-mono mb-2" style={{ color: "#a8e63a" }}>
+                {PLAN_LABELS["light"]}
+              </p>
+              <p className="text-2xl font-bold mb-4">{PLAN_PRICES["light"]}</p>
+              <ul className="space-y-1 mb-6">
+                {PLAN_FEATURES["light"].map((f) => (
+                  <li key={f} className="text-xs text-[#555250] flex items-start gap-1.5">
+                    <span className="text-[#a8e63a] mt-0.5">·</span> {f}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={`/api/stripe/subscribe?orderId=${encodeURIComponent(orderId)}&plan=light`}
+                className="inline-block text-center text-xs font-mono py-3 px-8 border transition-colors"
+                style={{ borderColor: "#a8e63a", color: "#a8e63a" }}
+              >
+                このプランを申し込む →
+              </a>
             </div>
 
             <p className="text-xs text-[#444440] font-mono">
