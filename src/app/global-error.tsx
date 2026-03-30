@@ -1,20 +1,13 @@
 "use client";
 
-import * as Sentry from "@sentry/nextjs";
-import { useEffect } from "react";
 import Link from "next/link";
 
 export default function GlobalError({
-  error,
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    Sentry.captureException(error);
-  }, [error]);
-
   return (
     <html lang="ja">
       <body
@@ -34,9 +27,6 @@ export default function GlobalError({
         <h2 style={{ fontSize: "24px", fontWeight: 700 }}>
           予期せぬエラーが発生しました
         </h2>
-        <p style={{ color: "#88857f", fontSize: "14px" }}>
-          問題は自動的に報告されました。
-        </p>
         <button
           onClick={reset}
           style={{
