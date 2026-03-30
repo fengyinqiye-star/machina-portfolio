@@ -19,23 +19,26 @@ const AGENTS = [
 
 const PRICING = [
   {
-    label: "LP / ランディングページ",
-    price: "1万円〜",
+    label: "ライト — LP・シンプルなWebサイト",
+    price: "9,800円〜",
     days: "2〜3日",
-    features: ["レスポンシブ対応", "お問い合わせフォーム", "Lighthouse 90以上保証", "納品後30日サポート"],
+    badge: "フリーランスの1/5",
+    features: ["静的サイト・LP（5ページ以内）", "お問い合わせフォーム", "Lighthouse 90以上保証", "検収後30日間の瑕疵担保"],
   },
   {
-    label: "コーポレートサイト",
-    price: "3万円〜",
-    days: "3〜5日",
-    features: ["全ページ設計", "管理画面（任意）", "SEO対策済み", "Lighthouse 90以上保証"],
+    label: "スタンダード — Webアプリ・多機能サイト",
+    price: "3.8万円〜",
+    days: "3〜7日",
+    badge: "制作会社の1/10",
+    features: ["認証・データベース連携", "API設計・実装", "テストカバレッジ80%以上", "検収後30日間の瑕疵担保"],
     highlight: true,
   },
   {
-    label: "Webアプリ / 予約システム",
-    price: "5万円〜",
-    days: "1〜2週間",
-    features: ["DB設計・API実装", "認証・決済連携", "自動テスト完備", "ソースコード全納品"],
+    label: "エンタープライズ — 大規模システム",
+    price: "要相談",
+    days: "要相談",
+    badge: "",
+    features: ["マイクロサービス構成", "CI/CD・インフラ構築", "セキュリティ要件対応", "検収後30日間の瑕疵担保"],
   },
 ];
 
@@ -133,11 +136,15 @@ export function AgentsSection() {
                 >
                   {plan.price}
                 </div>
-                <div
-                  className={`text-xs mb-8 ${plan.highlight ? "text-gray-400" : "text-[var(--muted)]"}`}
-                >
+                <div className={`text-xs mb-1 ${plan.highlight ? "text-gray-400" : "text-[var(--muted)]"}`}>
                   納品目安: {plan.days}
                 </div>
+                {plan.badge && (
+                  <div className="text-[10px] font-mono mb-6" style={{ color: "var(--accent)" }}>
+                    {plan.badge}
+                  </div>
+                )}
+                {!plan.badge && <div className="mb-6" />}
                 <ul className="space-y-2">
                   {plan.features.map((f) => (
                     <li
