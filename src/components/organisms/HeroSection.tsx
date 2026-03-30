@@ -48,7 +48,7 @@ export function HeroSection() {
           <br />
           16のAIエージェントが受注から納品まで全自動で動きます。
           <br />
-          <span className="text-sm" style={{ color: "var(--accent)" }}>LP 9,800円〜、Webアプリ 3.8万円〜。制作会社の1/10のコストを実現。</span>
+          <span className="text-sm" style={{ color: "var(--accent)" }}>LP 1万円、Webアプリ 3万円〜。制作会社の1/10のコストを実現。</span>
         </p>
 
         {/* Social proof */}
