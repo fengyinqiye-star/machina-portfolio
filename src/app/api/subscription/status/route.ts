@@ -5,9 +5,7 @@ import { isValidOrderId } from "@/lib/rateLimit";
 export const dynamic = "force-dynamic";
 
 const PLAN_PRICE_MAP: Record<string, string> = {
-  price_1TEViUBLGjf6t2zy7fGFcp8i: "light",
-  price_1TEViUBLGjf6t2zypbePDQIW: "standard",
-  price_1TEViUBLGjf6t2zy22tOaKSs: "premium",
+  price_1TGexwBLGjf6t2zyQnFid79H: "light",
 };
 
 export async function GET(request: NextRequest) {
