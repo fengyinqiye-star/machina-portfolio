@@ -10,14 +10,5 @@ Sentry.init({
   // パフォーマンストレース（10%サンプリング）
   tracesSampleRate: 0.1,
 
-  // セッションリプレイ（エラー時のみキャプチャ）
-  replaysOnErrorSampleRate: 1.0,
-  replaysSessionSampleRate: 0,
-
-  integrations: [
-    Sentry.replayIntegration({
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
-  ],
+  // Replay SDKはバンドルサイズが大きくLighthouseに影響するため無効化
 });
