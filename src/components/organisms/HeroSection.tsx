@@ -47,6 +47,8 @@ export function HeroSection() {
           要件定義・設計・実装・テスト・デプロイ——
           <br />
           16のAIエージェントが受注から納品まで全自動で動きます。
+          <br />
+          <span className="text-sm" style={{ color: "var(--accent)" }}>LP 1万円〜、コーポレート 3万円〜。従来の制作会社より圧倒的に安く、早い。</span>
         </p>
 
         {/* Social proof */}

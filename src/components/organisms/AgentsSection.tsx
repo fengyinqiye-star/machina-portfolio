@@ -20,20 +20,20 @@ const AGENTS = [
 const PRICING = [
   {
     label: "LP / ランディングページ",
-    price: "3〜5万円",
+    price: "1万円〜",
     days: "2〜3日",
     features: ["レスポンシブ対応", "お問い合わせフォーム", "Lighthouse 90以上保証", "納品後30日サポート"],
   },
   {
     label: "コーポレートサイト",
-    price: "5〜10万円",
+    price: "3万円〜",
     days: "3〜5日",
     features: ["全ページ設計", "管理画面（任意）", "SEO対策済み", "Lighthouse 90以上保証"],
     highlight: true,
   },
   {
     label: "Webアプリ / 予約システム",
-    price: "10万円〜",
+    price: "5万円〜",
     days: "1〜2週間",
     features: ["DB設計・API実装", "認証・決済連携", "自動テスト完備", "ソースコード全納品"],
   },
