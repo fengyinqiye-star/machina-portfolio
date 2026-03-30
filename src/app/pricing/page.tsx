@@ -86,7 +86,7 @@ const MAINTENANCE_PLANS = [
 const FAQS = [
   {
     q: "見積もりはどのくらいかかりますか？",
-    a: "フォームからご依頼いただいた後、AIエージェントが自動で分析し、24時間以内に概算見積もりをお送りします。表示価格はあくまで参考目安で、実際の金額はヒアリング後に確定します。",
+    a: "フォームを送信するとAIエージェントが即座に依頼内容を分析し、シンプル1万円・ミディアム3万円・コンプレックス5万円の3段階で判定します。ヒアリング不要で料金が確定します。",
   },
   {
     q: "修正は何回できますか？",
@@ -106,7 +106,7 @@ const FAQS = [
   },
   {
     q: "問い合わせへの返答はどのくらいかかりますか？",
-    a: "メールでのお問い合わせは、平日72時間以内を目安に返信します（autocode.2603@gmail.com）。プレミアムプランご契約中のお客様は24時間以内に対応します。",
+    a: "メールでのお問い合わせは、平日72時間以内を目安に返信します（autocode.2603@gmail.com）。",
   },
 ];
 
@@ -227,13 +227,13 @@ export default function PricingPage() {
             </div>
 
             <p className="text-xs text-[var(--muted)] mt-4">
-              ※ 表示価格は税抜きです。要件によって変動する場合があります。
+              ※ 表示価格は税抜きです。
             </p>
             <div className="mt-8 p-6 border border-[var(--border)] bg-[var(--bg)]">
-              <p className="text-sm font-semibold text-[var(--text)] mb-1">ライトとスタンダード、どちらか迷ったら？</p>
+              <p className="text-sm font-semibold text-[var(--text)] mb-1">どのプランか迷ったら？</p>
               <p className="text-sm text-[var(--muted)] leading-relaxed">
                 プランは選ばなくて大丈夫です。フォームにやりたいことを書いて送信するだけで、
-                AIエージェントが内容を分析して最適なプランと費用をご提案します。
+                AIエージェントが内容を分析して自動的にプランを判定します。
               </p>
               <Link
                 href="/#contact"

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { orderSchema, type OrderInput } from "@/lib/validators/order";
 import { FormField } from "@/components/molecules/FormField";
 import { Input } from "@/components/atoms/Input";
@@ -12,23 +12,16 @@ import { Button } from "@/components/atoms/Button";
 
 function ContactFormInner() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const refCode = searchParams.get("ref") ?? "";
   const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
     watch,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm<OrderInput>({
     resolver: zodResolver(orderSchema),
-    defaultValues: { honeypot: "", maintenancePlan: "none", customDomain: "", referralCode: "" },
+    defaultValues: { honeypot: "", maintenancePlan: "none", customDomain: "" },
   });
-
-  useEffect(() => {
-    if (refCode) setValue("referralCode", refCode);
-  }, [refCode, setValue]);
 
   const selectedPlan = watch("maintenancePlan");
 
@@ -62,8 +55,6 @@ function ContactFormInner() {
         className="absolute opacity-0 pointer-events-none"
         {...register("honeypot")}
       />
-      {/* 紹介コード（隠しフィールド） */}
-      <input type="hidden" {...register("referralCode")} />
 
       {/* Server error */}
       {serverError && (
