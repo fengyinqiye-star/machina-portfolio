@@ -1,9 +1,15 @@
+import dynamic from "next/dynamic";
 import { NavBar } from "@/components/molecules/NavBar";
 import { HeroSection } from "@/components/organisms/HeroSection";
 import { ServicesSection } from "@/components/organisms/ServicesSection";
 import { AgentsSection } from "@/components/organisms/AgentsSection";
 import { ProjectsSection } from "@/components/organisms/ProjectsSection";
-import { ContactForm } from "@/components/organisms/ContactForm";
+
+// zod + react-hook-form (~250KB) を初期バンドルから切り離す
+const ContactForm = dynamic(
+  () => import("@/components/organisms/ContactForm").then((m) => ({ default: m.ContactForm })),
+  { ssr: false }
+);
 
 const jsonLd = {
   "@context": "https://schema.org",
